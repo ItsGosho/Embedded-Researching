@@ -24,7 +24,6 @@ private:
     byte dataBus1PinNumber;
     byte dataBus0PinNumber;
 
-    void initialize();
 
 public:
     CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
@@ -34,9 +33,13 @@ public:
                         byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber, byte dataBus3PinNumber,
                         byte dataBus2PinNumber, byte dataBus1PinNumber, byte dataBus0PinNumber);
 
-    void sendCommand(byte dataBus7PinNumber, byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber);
+    void sendCommand(byte dataBus7PinValue, byte dataBus6PinValue, byte dataBus5PinValue, byte dataBus4PinValue);
 
-    void sendData(byte dataBus7PinNumber, byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber);
+    void sendData(byte dataBus7PinValue, byte dataBus6PinValuer, byte dataBus5PinValuer, byte dataBus4PinValue);
+
+    void initialize();
+
+    //void clearDisplay()
 };
 
 
