@@ -111,48 +111,101 @@ void CustomLiquidCrystal::sendData(byte dataBus7PinValue,
 }
 
 /*If 11 is passed it must also work from the lowest to the highest*/
+typedef struct {
+    int dbPin;
+    int mode;
+} test;
+
 void CustomLiquidCrystal::sendCommandNew(byte dataBusBits) {
-    // 0000 0011
+    int fourBitSeparator = 0;
 
-    //dbPin7 -> dbPin0
+    //Collect them
+    test modes[8] = {
+            {this->dataBus4PinNumber, 0},
+            {this->dataBus5PinNumber, 0},
+            {this->dataBus6PinNumber, 0},
+            {this->dataBus7PinNumber, 0},
+            {this->dataBus4PinNumber, 0},
+            {this->dataBus5PinNumber, 0},
+            {this->dataBus6PinNumber, 0},
+            {this->dataBus7PinNumber, 0},
+    };
 
-    int iterationsCounter = 0;
-
-    //map dbPin -> pinNumber
+    int testCounter = 0;
     while (dataBusBits != 0) {
         byte lastBit = dataBusBits & 1;
 
+        int dbPin = *this->pinsMap[7 - fourBitSeparator].dbPin;
 
-        //get from map dbPin by counter (0, 1 , 2) and set its value to the one from the if
         if (lastBit) {
-            //cout << 1;
+            //digitalWrite(dbPin, HIGH);
+            modes[testCounter] = {dbPin, HIGH};
         } else {
-            //cout << 0;
+            //digitalWrite(dbPin, LOW);
+            modes[testCounter] = {dbPin, LOW};
         }
 
         dataBusBits >>= 1;
-        iterationsCounter++;
+        fourBitSeparator++;
+        testCounter++;
+
+        if (fourBitSeparator % 4 == 0)
+            fourBitSeparator = 0;
     }
 
-    //if counter is less that 7 set all other to 0
+
+    if (fourBitSeparator != 0)
+        for (int i = 7 - 4 - fourBitSeparator; i >= 0; i--) {
+
+            byte* dbPinPointer = this->pinsMap[7 - fourBitSeparator].dbPin;
+
+            if (dbPinPointer == nullptr)
+                continue;
+
+            int dbPin = *dbPinPointer;
+
+            //digitalWrite(dbPin, LOW);
+            modes[testCounter] = {dbPin, LOW};
+            testCounter++;
+        }
+
+
+    for (int i = 7; i >= 0; i--) {
+
+        if(i % 4 == 0) {
+            digitalWrite(modes[i].dbPin, modes[i].mode);
+
+            digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
+            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
+            delay(10);
+            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
+            delay(10);
+        }
+    }
+
+    //set them :)
 }
 
 void CustomLiquidCrystal::initialize() {
     delay(15);
 
-    this->sendCommandNew(0b00000011);
+    //this->sendCommandNew(0b00000011);
+    this->sendCommand(0, 0, 1, 1);
 
     delay(5);
 
-    this->sendCommandNew(0b00000011);
+    //this->sendCommandNew(0b00000011);
+    this->sendCommand(0, 0, 1, 1);
 
     delay(1);
 
-    this->sendCommandNew(0b00000011);
+    //this->sendCommandNew(0b00000011);
+    this->sendCommand(0, 0, 1, 1);
 
 
     //Set 4-bit interface
-    this->sendCommandNew(0b00000010);
+    //this->sendCommandNew(0b00000010);
+    this->sendCommand(0, 0, 1, 0);
 
     //Set interface data length, number of display lines, and character font
     this->sendCommandNew(0b00101000);
