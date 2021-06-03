@@ -7,6 +7,10 @@
 
 
 typedef unsigned char byte;
+typedef struct {
+    char dbNumber;
+    byte* dbPin;
+} pinMap;
 
 class CustomLiquidCrystal {
 
@@ -24,6 +28,8 @@ private:
     byte dataBus1PinNumber;
     byte dataBus0PinNumber;
 
+    pinMap pinsMap[];
+
 
 public:
     CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
@@ -34,6 +40,8 @@ public:
                         byte dataBus2PinNumber, byte dataBus1PinNumber, byte dataBus0PinNumber);
 
     void sendCommand(byte dataBus7PinValue, byte dataBus6PinValue, byte dataBus5PinValue, byte dataBus4PinValue);
+
+    void sendCommandNew(byte dataBusBits);
 
     void sendData(byte dataBus7PinValue, byte dataBus6PinValuer, byte dataBus5PinValuer, byte dataBus4PinValue);
 
