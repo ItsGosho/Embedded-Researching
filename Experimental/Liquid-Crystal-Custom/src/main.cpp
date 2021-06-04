@@ -29,6 +29,7 @@ CustomLiquidCrystal customLiquidCrystal(9, 8, 2, 3, 4, 5);
 /*TODO: ASCII Converter when we expose setting text*/
 /*TODO: To view all of the available commands and test them*/
 void setup() {
+    Serial.begin(9600);
     customLiquidCrystal.initialize();
     /*TODO: Clear when initializing*/
 
@@ -48,11 +49,11 @@ void setup() {
 
     //Write H
 
-   /* customLiquidCrystal.sendCommand(0, 0, 0, 0); // turn on display and cursor
-    customLiquidCrystal.sendCommand(1, 1, 1, 0);*/
+    /* customLiquidCrystal.sendCommand(0, 0, 0, 0); // turn on display and cursor
+     customLiquidCrystal.sendCommand(1, 1, 1, 0);*/
 
     customLiquidCrystal.sendData(0, 1, 0, 0);
-    customLiquidCrystal.sendData(1, 0, 0, 0);
+    customLiquidCrystal.sendData(0, 0, 1, 0);
 
     //Write d
     //customLiquidCrystal.sendData(0, 1, 1, 0);

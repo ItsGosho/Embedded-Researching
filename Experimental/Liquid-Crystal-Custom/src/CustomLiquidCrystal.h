@@ -6,44 +6,43 @@
 #define CLIONTESTING_CUSTOMLIQUIDCRYSTAL_H
 
 
-typedef unsigned char byte;
 typedef struct {
-    char dbNumber;
-    byte* dbPin;
-} pinMap;
+    char bitPos;
+    int dbPin;
+} bitsPinMap;
 
 class CustomLiquidCrystal {
 
     /*TODO: Add each existing pin number here, so that it can be controlled from the library :)*/
 private:
-    byte registerSyncPinNumber;
-    byte enablePinNumber;
+    int registerSyncPinNumber;
+    int enablePinNumber;
 
-    byte dataBus7PinNumber;
-    byte dataBus6PinNumber;
-    byte dataBus5PinNumber;
-    byte dataBus4PinNumber;
-    byte dataBus3PinNumber;
-    byte dataBus2PinNumber;
-    byte dataBus1PinNumber;
-    byte dataBus0PinNumber;
+    int dataBus7PinNumber;
+    int dataBus6PinNumber;
+    int dataBus5PinNumber;
+    int dataBus4PinNumber;
+    int dataBus3PinNumber;
+    int dataBus2PinNumber;
+    int dataBus1PinNumber;
+    int dataBus0PinNumber;
 
-    pinMap pinsMap[];
+    bitsPinMap bitsPinsMap[];
 
 
 public:
-    CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
-                        byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber);
+    CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
+                        int dataBus6PinNumber, int dataBus5PinNumber, int dataBus4PinNumber);
 
-    CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
-                        byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber, byte dataBus3PinNumber,
-                        byte dataBus2PinNumber, byte dataBus1PinNumber, byte dataBus0PinNumber);
+    CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
+                        int dataBus6PinNumber, int dataBus5PinNumber, int dataBus4PinNumber, int dataBus3PinNumber,
+                        int dataBus2PinNumber, int dataBus1PinNumber, int dataBus0PinNumber);
 
-    void sendCommand(byte dataBus7PinValue, byte dataBus6PinValue, byte dataBus5PinValue, byte dataBus4PinValue);
+    void sendCommand(int dataBus7PinValue, int dataBus6PinValue, int dataBus5PinValue, int dataBus4PinValue);
 
-    void sendCommandNew(byte dataBusBits);
+    void sendCommandNew(int dataBusBits);
 
-    void sendData(byte dataBus7PinValue, byte dataBus6PinValuer, byte dataBus5PinValuer, byte dataBus4PinValue);
+    void sendData(int dataBus7PinValue, int dataBus6PinValuer, int dataBus5PinValuer, int dataBus4PinValue);
 
     void initialize();
 

@@ -1,6 +1,11 @@
 git commit -m "Added the right display initialization phase" --date "2021-06-03T13:40:50"
 
 June 2 - DONE
+
 June 3:
 git commit -m "Added the right display initialization phase" --date "2021-06-03T13:40:50"
 git commit -m "Added custom structure for the pins." --date "2021-06-03T14:15:03"
+git commit -m "Added the logic for transforming full byte to a command" --date "2021-06-03T16:03:13"
+
+June 4:
+git commit -m "Changed the algorithm for sending command with full bits provided." --date "2021-06-04T10:05:19"

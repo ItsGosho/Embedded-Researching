@@ -5,12 +5,12 @@
 #include "CustomLiquidCrystal.h"
 #include "Arduino.h"
 
-CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
-                                         byte enablePinNumber,
-                                         byte dataBus7PinNumber,
-                                         byte dataBus6PinNumber,
-                                         byte dataBus5PinNumber,
-                                         byte dataBus4PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
+CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
+                                         int enablePinNumber,
+                                         int dataBus7PinNumber,
+                                         int dataBus6PinNumber,
+                                         int dataBus5PinNumber,
+                                         int dataBus4PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
                                                                    enablePinNumber(enablePinNumber),
                                                                    dataBus7PinNumber(dataBus7PinNumber),
                                                                    dataBus6PinNumber(dataBus6PinNumber),
@@ -23,26 +23,26 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
     pinMode(this->dataBus5PinNumber, OUTPUT);
     pinMode(this->dataBus4PinNumber, OUTPUT);
 
-    this->pinsMap[0] = {0, nullptr};
-    this->pinsMap[1] = {1, nullptr};
-    this->pinsMap[2] = {2, nullptr};
-    this->pinsMap[3] = {3, nullptr};
-    this->pinsMap[4] = {4, &(this->dataBus4PinNumber)};
-    this->pinsMap[5] = {5, &(this->dataBus5PinNumber)};
-    this->pinsMap[6] = {6, &(this->dataBus6PinNumber)};
-    this->pinsMap[7] = {7, &(this->dataBus7PinNumber)};
+    bitsPinsMap[0] = {8, this->dataBus7PinNumber};
+    bitsPinsMap[1] = {7, this->dataBus6PinNumber};
+    bitsPinsMap[2] = {6, this->dataBus5PinNumber};
+    bitsPinsMap[3] = {5, this->dataBus4PinNumber};
+    bitsPinsMap[4] = {4, this->dataBus7PinNumber};
+    bitsPinsMap[5] = {3, this->dataBus6PinNumber};
+    bitsPinsMap[6] = {2, this->dataBus5PinNumber};
+    bitsPinsMap[7] = {1, this->dataBus4PinNumber};
 }
 
-CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
-                                         byte enablePinNumber,
-                                         byte dataBus7PinNumber,
-                                         byte dataBus6PinNumber,
-                                         byte dataBus5PinNumber,
-                                         byte dataBus4PinNumber,
-                                         byte dataBus3PinNumber,
-                                         byte dataBus2PinNumber,
-                                         byte dataBus1PinNumber,
-                                         byte dataBus0PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
+CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
+                                         int enablePinNumber,
+                                         int dataBus7PinNumber,
+                                         int dataBus6PinNumber,
+                                         int dataBus5PinNumber,
+                                         int dataBus4PinNumber,
+                                         int dataBus3PinNumber,
+                                         int dataBus2PinNumber,
+                                         int dataBus1PinNumber,
+                                         int dataBus0PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
                                                                    enablePinNumber(enablePinNumber),
                                                                    dataBus7PinNumber(dataBus7PinNumber),
                                                                    dataBus6PinNumber(dataBus6PinNumber),
@@ -63,21 +63,21 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
     pinMode(this->dataBus1PinNumber, OUTPUT);
     pinMode(this->dataBus0PinNumber, OUTPUT);
 
-    this->pinsMap[0] = {0, &(this->dataBus0PinNumber)};
-    this->pinsMap[1] = {1, &(this->dataBus1PinNumber)};
-    this->pinsMap[2] = {2, &(this->dataBus2PinNumber)};
-    this->pinsMap[3] = {3, &(this->dataBus3PinNumber)};
-    this->pinsMap[4] = {4, &(this->dataBus4PinNumber)};
-    this->pinsMap[5] = {5, &(this->dataBus5PinNumber)};
-    this->pinsMap[6] = {6, &(this->dataBus6PinNumber)};
-    this->pinsMap[7] = {7, &(this->dataBus7PinNumber)};
+    bitsPinsMap[0] = {8, this->dataBus7PinNumber};
+    bitsPinsMap[1] = {7, this->dataBus6PinNumber};
+    bitsPinsMap[2] = {6, this->dataBus5PinNumber};
+    bitsPinsMap[3] = {5, this->dataBus4PinNumber};
+    bitsPinsMap[4] = {4, this->dataBus3PinNumber};
+    bitsPinsMap[5] = {3, this->dataBus2PinNumber};
+    bitsPinsMap[6] = {2, this->dataBus1PinNumber};
+    bitsPinsMap[7] = {1, this->dataBus0PinNumber};
 }
 
 /*TODO: More abstract way*/
-void CustomLiquidCrystal::sendCommand(byte dataBus7PinValue,
-                                      byte dataBus6PinValue,
-                                      byte dataBus5PinValue,
-                                      byte dataBus4PinValue) {
+void CustomLiquidCrystal::sendCommand(int dataBus7PinValue,
+                                      int dataBus6PinValue,
+                                      int dataBus5PinValue,
+                                      int dataBus4PinValue) {
 
     /*TODO: Prepare bus lines, set rs, enable, disable*/
     digitalWrite(this->dataBus7PinNumber, dataBus7PinValue);
@@ -92,10 +92,10 @@ void CustomLiquidCrystal::sendCommand(byte dataBus7PinValue,
     delay(10);
 }
 
-void CustomLiquidCrystal::sendData(byte dataBus7PinValue,
-                                   byte dataBus6PinValue,
-                                   byte dataBus5PinValue,
-                                   byte dataBus4PinValue) {
+void CustomLiquidCrystal::sendData(int dataBus7PinValue,
+                                   int dataBus6PinValue,
+                                   int dataBus5PinValue,
+                                   int dataBus4PinValue) {
 
     digitalWrite(this->registerSyncPinNumber, HIGH); // RS Type
     digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
@@ -116,65 +116,29 @@ typedef struct {
     int mode;
 } test;
 
-void CustomLiquidCrystal::sendCommandNew(byte dataBusBits) {
-    int fourBitSeparator = 0;
+int* get8Bits(int value) {
+    int* bits = new int[8]{0, 0, 0, 0, 0, 0, 0, 0};
 
-    //Collect them
-    test modes[8] = {
-            {this->dataBus4PinNumber, 0},
-            {this->dataBus5PinNumber, 0},
-            {this->dataBus6PinNumber, 0},
-            {this->dataBus7PinNumber, 0},
-            {this->dataBus4PinNumber, 0},
-            {this->dataBus5PinNumber, 0},
-            {this->dataBus6PinNumber, 0},
-            {this->dataBus7PinNumber, 0},
-    };
+    int reverseCounterIndex = 7;
+    while (value != 0) {
+        int currentBit = value & 1;
 
-    int testCounter = 0;
-    while (dataBusBits != 0) {
-        byte lastBit = dataBusBits & 1;
-
-        int dbPin = *this->pinsMap[7 - fourBitSeparator].dbPin;
-
-        if (lastBit) {
-            //digitalWrite(dbPin, HIGH);
-            modes[testCounter] = {dbPin, HIGH};
-        } else {
-            //digitalWrite(dbPin, LOW);
-            modes[testCounter] = {dbPin, LOW};
-        }
-
-        dataBusBits >>= 1;
-        fourBitSeparator++;
-        testCounter++;
-
-        if (fourBitSeparator % 4 == 0)
-            fourBitSeparator = 0;
+        bits[reverseCounterIndex] = currentBit;
+        reverseCounterIndex--;
+        value >>= 1;
     }
 
+    return bits;
+}
 
-    if (fourBitSeparator != 0)
-        for (int i = 7 - 4 - fourBitSeparator; i >= 0; i--) {
+void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
+    int* bits = get8Bits(dataBusBits);
 
-            byte* dbPinPointer = this->pinsMap[7 - fourBitSeparator].dbPin;
+    for (int i = 0; i < 8; ++i) {
 
-            if (dbPinPointer == nullptr)
-                continue;
+        digitalWrite(this->bitsPinsMap[i].dbPin, *(bits + i));
 
-            int dbPin = *dbPinPointer;
-
-            //digitalWrite(dbPin, LOW);
-            modes[testCounter] = {dbPin, LOW};
-            testCounter++;
-        }
-
-
-    for (int i = 7; i >= 0; i--) {
-
-        if(i % 4 == 0) {
-            digitalWrite(modes[i].dbPin, modes[i].mode);
-
+        if (i == 3 || i == 7) {
             digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
             digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
             delay(10);
@@ -183,7 +147,7 @@ void CustomLiquidCrystal::sendCommandNew(byte dataBusBits) {
         }
     }
 
-    //set them :)
+    delete[] bits;
 }
 
 void CustomLiquidCrystal::initialize() {
