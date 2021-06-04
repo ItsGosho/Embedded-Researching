@@ -53,7 +53,10 @@ void setup() {
      customLiquidCrystal.sendCommand(1, 1, 1, 0);*/
 
     customLiquidCrystal.sendData(0, 1, 0, 0);
-    customLiquidCrystal.sendData(0, 0, 1, 0);
+    customLiquidCrystal.sendData(1, 0, 1, 1);
+
+    customLiquidCrystal.sendData(0, 1, 0, 0);
+    customLiquidCrystal.sendData(1, 1, 1, 1);
 
     //Write d
     //customLiquidCrystal.sendData(0, 1, 1, 0);

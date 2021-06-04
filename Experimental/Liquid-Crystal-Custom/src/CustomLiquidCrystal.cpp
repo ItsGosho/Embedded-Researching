@@ -136,31 +136,27 @@ void CustomLiquidCrystal::sendData(int dataBus7PinValue,
     }
 }*/
 
-typedef struct {
-    uint8_t bits[8];
-} Bit8Holder;
+template<typename T, size_t N>
+void getBits(uint8_t value, T (& bits)[N]) {
 
-Bit8Holder get8Bits(int value) {
-    Bit8Holder bits = {0, 0, 0, 0, 0, 0, 0, 0};
-
-    int reverseCounterIndex = 7;
+    int reverseCounterIndex = N - 1;
     while (value != 0) {
-        bool currentBit = value & 1;
+        uint8_t currentBit = value & 1;
 
-        bits.bits[reverseCounterIndex] = currentBit;
+        bits[reverseCounterIndex] = currentBit;
         reverseCounterIndex--;
         value >>= 1;
     }
-
-    return bits;
 }
 
 void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
-    Bit8Holder bits = get8Bits(dataBusBits);
 
-    for (int i = 0; i < 8; ++i) {
+    uint8_t bits[8] = {0,0,0,0,0,0,0,0};
+    getBits(dataBusBits, bits);
 
-        digitalWrite(this->bitsPinsMap[i].dbPin, bits.bits[i]);
+    for (int i = 0; i < 8; i++) {
+
+        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
 
         if (i == 3 || i == 7) {
             digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
