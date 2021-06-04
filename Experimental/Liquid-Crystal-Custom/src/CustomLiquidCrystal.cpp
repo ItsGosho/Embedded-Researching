@@ -71,10 +71,11 @@ CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
 }
 
 /*TODO: More abstract way*/
-void CustomLiquidCrystal::sendCommand(int dataBus7PinValue,
-                                      int dataBus6PinValue,
-                                      int dataBus5PinValue,
-                                      int dataBus4PinValue) {
+void CustomLiquidCrystal::send(RegisterSelect registerSelect,
+                               int dataBus7PinValue,
+                               int dataBus6PinValue,
+                               int dataBus5PinValue,
+                               int dataBus4PinValue) {
 
     /*TODO: Prepare bus lines, set rs, enable, disable*/
     digitalWrite(this->dataBus7PinNumber, dataBus7PinValue);
@@ -82,11 +83,11 @@ void CustomLiquidCrystal::sendCommand(int dataBus7PinValue,
     digitalWrite(this->dataBus5PinNumber, dataBus5PinValue);
     digitalWrite(this->dataBus4PinNumber, dataBus4PinValue);
 
-    digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
+    digitalWrite(this->registerSyncPinNumber, registerSelect); // RS Type
     digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
-    delay(10);
+    delay(1);
     digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
-    delay(10);
+    delay(1);
 }
 
 template<typename T, size_t N>
@@ -102,59 +103,49 @@ void getBits(uint8_t value, T (& bits)[N]) {
     }
 }
 
-void CustomLiquidCrystal::sendNew(RegisterSelect registerSelect, int dataBusBits) {
+void CustomLiquidCrystal::send(RegisterSelect registerSelect, int dataBusBits) {
 
     uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     getBits(dataBusBits, bits);
 
-    for (int i = 0; i < 8; i++) {
-
-        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
-
-        if (i == 3 || i == 7) {
-            digitalWrite(this->registerSyncPinNumber, registerSelect); // RS Type
-            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
-            delay(1);
-            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
-            delay(1);
-        }
-    }
+    this->send(registerSelect, bits[0], bits[1], bits[2], bits[3]);
+    this->send(registerSelect, bits[4], bits[5], bits[6], bits[7]);
 }
 
 void CustomLiquidCrystal::initialize() {
     delay(15);
 
-    this->sendCommand(0, 0, 1, 1);
+    this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
 
     delay(5);
 
-    this->sendCommand(0, 0, 1, 1);
+    this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
 
     delay(1);
 
-    this->sendCommand(0, 0, 1, 1);
+    this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
 
 
     //Set 4-bit interface
     //this->sendCommandNew(0b00000010);
-    this->sendCommand(0, 0, 1, 0);
+    this->send(RegisterSelect::COMMAND, 0, 0, 1, 0);
 
     //Set interface data length, number of display lines, and character font
-    this->sendNew(RegisterSelect::COMMAND,0b00101000);
+    this->send(RegisterSelect::COMMAND, 0b00101000);
 
     //Display off
-    this->sendNew(RegisterSelect::COMMAND,0b00001000);
+    this->send(RegisterSelect::COMMAND, 0b00001000);
 
     //Display clear
-    this->sendNew(RegisterSelect::COMMAND,0b00000001);
+    this->send(RegisterSelect::COMMAND, 0b00000001);
 
     //Entry mode set
-    this->sendNew(RegisterSelect::COMMAND,0b00000110);
+    this->send(RegisterSelect::COMMAND, 0b00000110);
 
     //Display on
-    this->sendNew(RegisterSelect::COMMAND,0b00001100);
+    this->send(RegisterSelect::COMMAND, 0b00001100);
 }
 
 void CustomLiquidCrystal::clearDisplay() {
-    this->sendNew(RegisterSelect::COMMAND,0b00000001);
+    this->send(RegisterSelect::COMMAND, 0b00000001);
 }

@@ -14,3 +14,4 @@ git commit -m "Removed the wrapping of the array and replaced it with reference 
 git commit -m "Exposed a 8 bit data setter" --date "2021-06-04T14:01:33"
 git commit -m "Exposed a enumeration and method for sending, which enumeration will declare the rs type" --date "2021-06-04T14:30:05"
 git commit -m "Removed unused methods and comments" --date "2021-06-04T14:35:01"
+git commit -m "The detailed send is now private and generic. The sendNew is now send but a bit abstract, not iterating anything anymore" --date "2021-06-04T14:59:40"

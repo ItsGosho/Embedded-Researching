@@ -38,7 +38,7 @@ void setup() {
     customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01101100);
     customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01101100);
     customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01101111);
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b00110001);
+    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b00110010);
 }
 
 //1001001101
