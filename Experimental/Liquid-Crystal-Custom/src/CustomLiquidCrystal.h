@@ -41,15 +41,6 @@ public:
                      int dataBus5PinValue,
                      int dataBus4PinValue);
 
-    void sendData(int dataBus7PinValue,
-                  int dataBus6PinValue,
-                  int dataBus5PinValue,
-                  int dataBus4PinValue);
-
-    void sendCommandNew(int dataBusBits);
-
-    void sendDataNew(int dataBusBits);
-
     void sendNew(RegisterSelect registerSelect, int value);
 
     void initialize();

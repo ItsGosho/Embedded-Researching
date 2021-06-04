@@ -1,7 +1,6 @@
 #include "CustomLiquidCrystal.h"
 #include "Arduino.h"
 #include "serialPrintF/SerialPrintF.h"
-#include "RegisterSelect.h"
 
 CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
                                          int enablePinNumber,
@@ -90,49 +89,6 @@ void CustomLiquidCrystal::sendCommand(int dataBus7PinValue,
     delay(10);
 }
 
-void CustomLiquidCrystal::sendData(int dataBus7PinValue,
-                                   int dataBus6PinValue,
-                                   int dataBus5PinValue,
-                                   int dataBus4PinValue) {
-
-    digitalWrite(this->dataBus7PinNumber, dataBus7PinValue);
-    digitalWrite(this->dataBus6PinNumber, dataBus6PinValue);
-    digitalWrite(this->dataBus5PinNumber, dataBus5PinValue);
-    digitalWrite(this->dataBus4PinNumber, dataBus4PinValue);
-
-    digitalWrite(this->registerSyncPinNumber, HIGH); // RS Type
-    digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
-    delay(10);
-    digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
-    delay(10);
-}
-
-/*void CustomLiquidCrystal::sendCommandNew(int value) {
-    uint8_t bits[] = {0, 0, 0, 0, 0, 0, 0, 0};
-
-    int reverseCounterIndex = 7;
-    while (value != 0) {
-        uint8_t currentBit = value & 1;
-
-        bits[reverseCounterIndex] = currentBit;
-        reverseCounterIndex--;
-        value >>= 1;
-    }
-
-    for (int i = 0; i < 8; ++i) {
-
-        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
-
-        if (i == 3 || i == 7) {
-            digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
-            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
-            delay(1);
-            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
-            delay(1);
-        }
-    }
-}*/
-
 template<typename T, size_t N>
 void getBits(uint8_t value, T (& bits)[N]) {
 
@@ -143,44 +99,6 @@ void getBits(uint8_t value, T (& bits)[N]) {
         bits[reverseCounterIndex] = currentBit;
         reverseCounterIndex--;
         value >>= 1;
-    }
-}
-
-void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
-
-    uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    getBits(dataBusBits, bits);
-
-    for (int i = 0; i < 8; i++) {
-
-        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
-
-        if (i == 3 || i == 7) {
-            digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
-            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
-            delay(1);
-            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
-            delay(1);
-        }
-    }
-}
-
-void CustomLiquidCrystal::sendDataNew(int dataBusBits) {
-
-    uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    getBits(dataBusBits, bits);
-
-    for (int i = 0; i < 8; i++) {
-
-        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
-
-        if (i == 3 || i == 7) {
-            digitalWrite(this->registerSyncPinNumber, HIGH); // RS Type
-            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
-            delay(1);
-            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
-            delay(1);
-        }
     }
 }
 
@@ -240,45 +158,3 @@ void CustomLiquidCrystal::initialize() {
 void CustomLiquidCrystal::clearDisplay() {
     this->sendNew(RegisterSelect::COMMAND,0b00000001);
 }
-
-/*
- *
- *     delay(15);
-
-    this->sendCommand(0, 0, 1, 1);
-
-    delay(5);
-
-    this->sendCommand(0, 0, 1, 1);
-
-    delay(1);
-
-    this->sendCommand(0, 0, 1, 1);
-
-
-    //Set 4-bit interface
-    this->sendCommand(0, 0, 1, 0);
-
-    //Set interface data length, number of display lines, and character font
-    this->sendCommand(0, 0, 1, 0);
-    this->sendCommand(1, 0, 0, 0);
-
-    //Display off
-    this->sendCommand(0, 0, 0, 0);
-    this->sendCommand(1, 0, 0, 0);
-
-    //Display clear
-    this->sendCommand(0, 0, 0, 0);
-    this->sendCommand(0, 0, 0, 1);
-
-    //Entry mode set
-    this->sendCommand(0, 0, 0, 0);
-    this->sendCommand(0, 1, 1, 0);
-
-    //Display on
-    this->sendCommand(0, 0, 0, 0);
-    this->sendCommand(1, 1, 0, 0);
- *
- * */
-
-

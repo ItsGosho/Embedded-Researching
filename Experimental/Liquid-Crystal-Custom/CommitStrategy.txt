@@ -13,3 +13,4 @@ git commit -m "Wrapped the array of the returned bits into a struct to avoid dyn
 git commit -m "Removed the wrapping of the array and replaced it with reference passing" --date "2021-06-04T13:33:24"
 git commit -m "Exposed a 8 bit data setter" --date "2021-06-04T14:01:33"
 git commit -m "Exposed a enumeration and method for sending, which enumeration will declare the rs type" --date "2021-06-04T14:30:05"
+git commit -m "Removed unused methods and comments" --date "2021-06-04T14:35:01"
