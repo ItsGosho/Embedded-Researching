@@ -41,6 +41,7 @@ public:
     void sendCommand(int dataBus7PinValue, int dataBus6PinValue, int dataBus5PinValue, int dataBus4PinValue);
 
     void sendCommandNew(int dataBusBits);
+    void sendDataNew(int dataBusBits);
 
     void sendData(int dataBus7PinValue, int dataBus6PinValuer, int dataBus5PinValuer, int dataBus4PinValue);
 

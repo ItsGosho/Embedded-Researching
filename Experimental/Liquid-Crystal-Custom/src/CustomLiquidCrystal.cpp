@@ -151,7 +151,7 @@ void getBits(uint8_t value, T (& bits)[N]) {
 
 void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
 
-    uint8_t bits[8] = {0,0,0,0,0,0,0,0};
+    uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     getBits(dataBusBits, bits);
 
     for (int i = 0; i < 8; i++) {
@@ -166,8 +166,25 @@ void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
             delay(1);
         }
     }
+}
 
-    //delete[] bits;
+void CustomLiquidCrystal::sendDataNew(int dataBusBits) {
+
+    uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    getBits(dataBusBits, bits);
+
+    for (int i = 0; i < 8; i++) {
+
+        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
+
+        if (i == 3 || i == 7) {
+            digitalWrite(this->registerSyncPinNumber, HIGH); // RS Type
+            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
+            delay(1);
+            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
+            delay(1);
+        }
+    }
 }
 
 void CustomLiquidCrystal::initialize() {

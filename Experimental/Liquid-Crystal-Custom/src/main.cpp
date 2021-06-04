@@ -33,43 +33,11 @@ void setup() {
     customLiquidCrystal.initialize();
     /*TODO: Clear when initializing*/
 
-/*    customLiquidCrystal.sendCommand(0, 0, 1, 0); // Set to 4 bit operation
-
-    //Set 4 bit operation and set one line display and 5x8
-    customLiquidCrystal.sendCommand(0, 0, 1, 0);
-    customLiquidCrystal.sendCommand(0, 0, 0, 0);
-
-    //Turns on display and cursor, because of initilization it was in space mode
-    customLiquidCrystal.sendCommand(0, 0, 0, 0);
-    customLiquidCrystal.sendCommand(1, 1, 1, 0);
-
-    //Set to increment address by one and shift cursor on char write
-    customLiquidCrystal.sendCommand(0, 0, 0, 0);
-    customLiquidCrystal.sendCommand(0, 1, 1, 0);*/
-
-    //Write H
-
-    /* customLiquidCrystal.sendCommand(0, 0, 0, 0); // turn on display and cursor
-     customLiquidCrystal.sendCommand(1, 1, 1, 0);*/
-
-    customLiquidCrystal.sendData(0, 1, 0, 0);
-    customLiquidCrystal.sendData(1, 0, 1, 1);
-
-    customLiquidCrystal.sendData(0, 1, 0, 0);
-    customLiquidCrystal.sendData(1, 1, 1, 1);
-
-    //Write d
-    //customLiquidCrystal.sendData(0, 1, 1, 0);
-    //customLiquidCrystal.sendData(0, 1, 0, 0);
-
-    //delay(1500);
-
-    //customLiquidCrystal.sendCommand(0,0,0,0);
-    //customLiquidCrystal.sendCommand(0,0,0,1);
-
-    //test
-    /*customLiquidCrystal.sendData(0,0,0,1);
-    customLiquidCrystal.sendData(0,0,0,1);*/
+    customLiquidCrystal.sendDataNew(0b01001000);
+    customLiquidCrystal.sendDataNew(0b01100101);
+    customLiquidCrystal.sendDataNew(0b01101100);
+    customLiquidCrystal.sendDataNew(0b01101100);
+    customLiquidCrystal.sendDataNew(0b01101111);
 }
 
 //1001001101
