@@ -40,6 +40,10 @@ public:
 
     void clearDisplay();
 
+    void setDisplayOff();
+
+    void setDisplayOn();
+
 private:
     void send(RegisterSelect registerSelect,
               int dataBus7PinValue,
@@ -49,12 +53,11 @@ private:
 
     void set4BitInterface();
 
-    void setDisplayOff();
-
     void setEntryMode(CursorDirection cursorDirection, DisplayShift displayShift);
 
-    void setDisplayOn();
-
+    /**
+     * Cannot be used after initialization. Eg: It has only one-time usage.
+     */
     void setFunction(InterfaceLength interfaceLength, Lines lines, CharacterFont characterFont);
 };
 

@@ -130,7 +130,8 @@ void CustomLiquidCrystal::setFunction(InterfaceLength interfaceLength, Lines lin
 }
 
 void CustomLiquidCrystal::setDisplayOff() {
-    this->send(RegisterSelect::COMMAND, 0b00101000);
+    //this->send(RegisterSelect::COMMAND, 0b00101000);
+    this->send(RegisterSelect::COMMAND, 0b00001000);
 }
 
 void CustomLiquidCrystal::clearDisplay() {

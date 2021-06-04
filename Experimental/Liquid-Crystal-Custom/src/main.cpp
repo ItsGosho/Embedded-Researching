@@ -50,6 +50,27 @@ void setup() {
     customLiquidCrystal.send(RegisterSelect::DATA, 0b01110010);
     customLiquidCrystal.send(RegisterSelect::DATA, 0b01100111);
     customLiquidCrystal.send(RegisterSelect::DATA, 0b01101001);
+
+    delay(3000);
+
+    customLiquidCrystal.setDisplayOff();
+
+    delay(3000);
+
+    customLiquidCrystal.setDisplayOn();
+
+    delay(3000);
+
+    customLiquidCrystal.clearDisplay();
+
+    delay(3000);
+
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01001000);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100101);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101100);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101100);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101111);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b00110010);
 }
 
 //1001001101
