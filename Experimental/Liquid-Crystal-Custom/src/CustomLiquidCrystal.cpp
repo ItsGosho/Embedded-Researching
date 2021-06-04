@@ -1,10 +1,7 @@
-//
-// Created by Gosho on 02-Jun-21.
-//
-
 #include "CustomLiquidCrystal.h"
 #include "Arduino.h"
 #include "serialPrintF/SerialPrintF.h"
+#include "RegisterSelect.h"
 
 CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
                                          int enablePinNumber,
@@ -187,6 +184,25 @@ void CustomLiquidCrystal::sendDataNew(int dataBusBits) {
     }
 }
 
+void CustomLiquidCrystal::sendNew(RegisterSelect registerSelect, int dataBusBits) {
+
+    uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    getBits(dataBusBits, bits);
+
+    for (int i = 0; i < 8; i++) {
+
+        digitalWrite(this->bitsPinsMap[i].dbPin, bits[i]);
+
+        if (i == 3 || i == 7) {
+            digitalWrite(this->registerSyncPinNumber, registerSelect); // RS Type
+            digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
+            delay(1);
+            digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
+            delay(1);
+        }
+    }
+}
+
 void CustomLiquidCrystal::initialize() {
     delay(15);
 
@@ -206,23 +222,23 @@ void CustomLiquidCrystal::initialize() {
     this->sendCommand(0, 0, 1, 0);
 
     //Set interface data length, number of display lines, and character font
-    this->sendCommandNew(0b00101000);
+    this->sendNew(RegisterSelect::COMMAND,0b00101000);
 
     //Display off
-    this->sendCommandNew(0b00001000);
+    this->sendNew(RegisterSelect::COMMAND,0b00001000);
 
     //Display clear
-    this->sendCommandNew(0b00000001);
+    this->sendNew(RegisterSelect::COMMAND,0b00000001);
 
     //Entry mode set
-    this->sendCommandNew(0b00000110);
+    this->sendNew(RegisterSelect::COMMAND,0b00000110);
 
     //Display on
-    this->sendCommandNew(0b00001100);
+    this->sendNew(RegisterSelect::COMMAND,0b00001100);
 }
 
 void CustomLiquidCrystal::clearDisplay() {
-    this->sendCommandNew(0b00000001);
+    this->sendNew(RegisterSelect::COMMAND,0b00000001);
 }
 
 /*
