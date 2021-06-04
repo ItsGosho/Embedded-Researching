@@ -17,15 +17,6 @@ CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
     pinMode(this->dataBus6PinNumber, OUTPUT);
     pinMode(this->dataBus5PinNumber, OUTPUT);
     pinMode(this->dataBus4PinNumber, OUTPUT);
-
-    bitsPinsMap[0] = {8, this->dataBus7PinNumber};
-    bitsPinsMap[1] = {7, this->dataBus6PinNumber};
-    bitsPinsMap[2] = {6, this->dataBus5PinNumber};
-    bitsPinsMap[3] = {5, this->dataBus4PinNumber};
-    bitsPinsMap[4] = {4, this->dataBus7PinNumber};
-    bitsPinsMap[5] = {3, this->dataBus6PinNumber};
-    bitsPinsMap[6] = {2, this->dataBus5PinNumber};
-    bitsPinsMap[7] = {1, this->dataBus4PinNumber};
 }
 
 CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
@@ -57,15 +48,6 @@ CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
     pinMode(this->dataBus2PinNumber, OUTPUT);
     pinMode(this->dataBus1PinNumber, OUTPUT);
     pinMode(this->dataBus0PinNumber, OUTPUT);
-
-    bitsPinsMap[0] = {8, this->dataBus7PinNumber};
-    bitsPinsMap[1] = {7, this->dataBus6PinNumber};
-    bitsPinsMap[2] = {6, this->dataBus5PinNumber};
-    bitsPinsMap[3] = {5, this->dataBus4PinNumber};
-    bitsPinsMap[4] = {4, this->dataBus3PinNumber};
-    bitsPinsMap[5] = {3, this->dataBus2PinNumber};
-    bitsPinsMap[6] = {2, this->dataBus1PinNumber};
-    bitsPinsMap[7] = {1, this->dataBus0PinNumber};
 }
 
 /*TODO: More abstract way*/

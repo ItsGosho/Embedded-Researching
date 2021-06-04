@@ -16,3 +16,4 @@ git commit -m "Exposed a enumeration and method for sending, which enumeration w
 git commit -m "Removed unused methods and comments" --date "2021-06-04T14:35:01"
 git commit -m "The detailed send is now private and generic. The sendNew is now send but a bit abstract, not iterating anything anymore" --date "2021-06-04T14:59:40"
 git commit -m "Added a CursorDirection and Display shifts enums, which are using in the entry mode, which is using bitwise to gently set the bits." --date "2021-06-04T15:50:13"
+git commit -m "Removed the bits pin map" --date "2021-06-04T16:01:50"

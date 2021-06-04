@@ -7,11 +7,6 @@
 #include "Arduino.h"
 #include "serialPrintF/SerialPrintF.h"
 
-typedef struct {
-    char bitPos;
-    int dbPin;
-} bitsPinMap;
-
 class CustomLiquidCrystal {
 
     /*TODO: Add each existing pin number here, so that it can be controlled from the library :)*/
@@ -27,9 +22,6 @@ private:
     int dataBus2PinNumber;
     int dataBus1PinNumber;
     int dataBus0PinNumber;
-
-    bitsPinMap bitsPinsMap[];
-
 
 public:
     CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
