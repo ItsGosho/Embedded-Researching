@@ -2,7 +2,10 @@
 #define CLIONTESTING_CUSTOMLIQUIDCRYSTAL_H
 
 #include "RegisterSelect.h"
-#include "stdint.h"
+#include "CursorDirection.h"
+#include "DisplayShift.h"
+#include "Arduino.h"
+#include "serialPrintF/SerialPrintF.h"
 
 typedef struct {
     char bitPos;
@@ -48,6 +51,16 @@ private:
               int dataBus6PinValue,
               int dataBus5PinValue,
               int dataBus4PinValue);
+
+    void set4BitInterface();
+
+    void setDisplayOff();
+
+    void setEntryMode(CursorDirection cursorDirection, DisplayShift displayShift);
+
+    void setDisplayOn();
+
+    void setFunction();
 };
 
 

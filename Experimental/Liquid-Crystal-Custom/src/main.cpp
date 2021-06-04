@@ -33,12 +33,23 @@ void setup() {
     customLiquidCrystal.initialize();
     /*TODO: Clear when initializing*/
 
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01001000);
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01100101);
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01101100);
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01101100);
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b01101111);
-    customLiquidCrystal.sendNew(RegisterSelect::DATA, 0b00110010);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01001000);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100101);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101100);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101100);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101111);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b00110010);
+
+
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b00100000);
+
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b00100000);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01000111);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100101);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101111);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01110010);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100111);
+    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101001);
 }
 
 //1001001101

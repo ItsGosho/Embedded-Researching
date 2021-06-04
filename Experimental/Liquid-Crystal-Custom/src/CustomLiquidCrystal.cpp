@@ -1,6 +1,4 @@
 #include "CustomLiquidCrystal.h"
-#include "Arduino.h"
-#include "serialPrintF/SerialPrintF.h"
 
 CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
                                          int enablePinNumber,
@@ -125,27 +123,46 @@ void CustomLiquidCrystal::initialize() {
 
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
 
+    this->set4BitInterface();
+    this->setFunction();
+    this->setDisplayOff();
+    this->clearDisplay();
+    this->setEntryMode(CursorDirection::INCREMENT, DisplayShift::NO);
+    this->setDisplayOn();
+}
 
-    //Set 4-bit interface
-    //this->sendCommandNew(0b00000010);
+/*TODO: Some of them must be private, because they can be executed only on initilizatin as setting data length, number of lines and so on,. Check doc again for them!*/
+
+/*
+ *
+ *
+ * */
+
+void CustomLiquidCrystal::set4BitInterface() {
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 0);
+}
 
-    //Set interface data length, number of display lines, and character font
+/*
+ * 0 0 1 1 N F * *
+ *
+ * */
+void CustomLiquidCrystal::setFunction() {
     this->send(RegisterSelect::COMMAND, 0b00101000);
+}
 
-    //Display off
-    this->send(RegisterSelect::COMMAND, 0b00001000);
-
-    //Display clear
-    this->send(RegisterSelect::COMMAND, 0b00000001);
-
-    //Entry mode set
-    this->send(RegisterSelect::COMMAND, 0b00000110);
-
-    //Display on
-    this->send(RegisterSelect::COMMAND, 0b00001100);
+void CustomLiquidCrystal::setDisplayOff() {
+    this->send(RegisterSelect::COMMAND, 0b00101000);
 }
 
 void CustomLiquidCrystal::clearDisplay() {
     this->send(RegisterSelect::COMMAND, 0b00000001);
+}
+
+void CustomLiquidCrystal::setEntryMode(CursorDirection cursorDirection, DisplayShift displayShift) {
+    uint8_t commandBits = 0b00000100 | (cursorDirection << 1) | (displayShift << 0);
+    this->send(RegisterSelect::COMMAND, commandBits);
+}
+
+void CustomLiquidCrystal::setDisplayOn() {
+    this->send(RegisterSelect::COMMAND, 0b00001100);
 }
