@@ -2,6 +2,8 @@
 #define LIQUID_CRYSTAL_CUSTOM_CURSORDIRECTION_H
 
 /**
+ * Instruction bit name - I/D
+ *
  * When a new character is written, where the cursor will go.
  * INCREMENT -
  * DECREMENT -

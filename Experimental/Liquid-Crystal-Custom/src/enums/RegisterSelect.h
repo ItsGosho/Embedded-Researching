@@ -1,6 +1,9 @@
 #ifndef LIQUID_CRYSTAL_CUSTOM_REGISTERSELECT_H
 #define LIQUID_CRYSTAL_CUSTOM_REGISTERSELECT_H
 
+/**
+ * Instruction bit name - RS
+ */
 enum RegisterSelect {
     COMMAND = 0,
     DATA = 1

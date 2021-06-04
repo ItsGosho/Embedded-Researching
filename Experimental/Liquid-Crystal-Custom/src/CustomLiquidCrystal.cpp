@@ -106,7 +106,7 @@ void CustomLiquidCrystal::initialize() {
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
 
     this->set4BitInterface();
-    this->setFunction();
+    this->setFunction(InterfaceLength::FOUR_BIT, Lines::TWO, CharacterFont::FIVE_EIGHT);
     this->setDisplayOff();
     this->clearDisplay();
     this->setEntryMode(CursorDirection::INCREMENT, DisplayShift::NO);
@@ -124,12 +124,9 @@ void CustomLiquidCrystal::set4BitInterface() {
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 0);
 }
 
-/*
- * 0 0 1 1 N F * *
- *
- * */
-void CustomLiquidCrystal::setFunction() {
-    this->send(RegisterSelect::COMMAND, 0b00101000);
+void CustomLiquidCrystal::setFunction(InterfaceLength interfaceLength, Lines lines, CharacterFont characterFont) {
+    uint8_t commandBits = 0b00100000 | (interfaceLength << 4) | (lines << 3) | (characterFont << 2);
+    this->send(RegisterSelect::COMMAND, commandBits);
 }
 
 void CustomLiquidCrystal::setDisplayOff() {

@@ -1,9 +1,12 @@
 #ifndef CLIONTESTING_CUSTOMLIQUIDCRYSTAL_H
 #define CLIONTESTING_CUSTOMLIQUIDCRYSTAL_H
 
-#include "RegisterSelect.h"
-#include "CursorDirection.h"
-#include "DisplayShift.h"
+#include "enums/RegisterSelect.h"
+#include "enums/CursorDirection.h"
+#include "enums/DisplayShift.h"
+#include "enums/CharacterFont.h"
+#include "enums/InterfaceLength.h"
+#include "enums/Lines.h"
 #include "Arduino.h"
 #include "serialPrintF/SerialPrintF.h"
 
@@ -52,7 +55,7 @@ private:
 
     void setDisplayOn();
 
-    void setFunction();
+    void setFunction(InterfaceLength interfaceLength, Lines lines, CharacterFont characterFont);
 };
 
 
