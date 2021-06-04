@@ -4,7 +4,7 @@
 /**
  * Instruction bit name - N
  */
-enum Lines {
+enum class Lines {
     ONE = 0,
     TWO = 1
 };

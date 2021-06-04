@@ -8,7 +8,7 @@
  * INCREMENT -
  * DECREMENT -
  */
-enum CursorDirection {
+enum class CursorDirection {
     DECREMENT = 0,
     INCREMENT = 1
 };

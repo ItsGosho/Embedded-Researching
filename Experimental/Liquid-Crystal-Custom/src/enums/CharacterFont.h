@@ -4,7 +4,7 @@
 /**
  * Instruction bit name - F
  */
-enum CharacterFont {
+enum class CharacterFont {
     FIVE_EIGHT = 0,
     FIVE_TEN = 1
 };

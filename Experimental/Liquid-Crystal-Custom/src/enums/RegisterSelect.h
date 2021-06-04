@@ -4,7 +4,7 @@
 /**
  * Instruction bit name - RS
  */
-enum RegisterSelect {
+enum class RegisterSelect {
     COMMAND = 0,
     DATA = 1
 };

@@ -63,7 +63,7 @@ void CustomLiquidCrystal::send(RegisterSelect registerSelect,
     digitalWrite(this->dataBus5PinNumber, dataBus5PinValue);
     digitalWrite(this->dataBus4PinNumber, dataBus4PinValue);
 
-    digitalWrite(this->registerSyncPinNumber, registerSelect); // RS Type
+    digitalWrite(this->registerSyncPinNumber, static_cast<uint8_t>(registerSelect)); // RS Type
     digitalWrite(this->enablePinNumber, HIGH); // Set receiving on.
     delay(1);
     digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
@@ -125,7 +125,11 @@ void CustomLiquidCrystal::set4BitInterface() {
 }
 
 void CustomLiquidCrystal::setFunction(InterfaceLength interfaceLength, Lines lines, CharacterFont characterFont) {
-    uint8_t commandBits = 0b00100000 | (interfaceLength << 4) | (lines << 3) | (characterFont << 2);
+    uint8_t interfaceLengthMask = static_cast<uint8_t>(interfaceLength) << 4;
+    uint8_t linesMask = static_cast<uint8_t>(lines) << 3;
+    uint8_t characterFontMask = static_cast<uint8_t>(characterFont) << 2;
+
+    uint8_t commandBits = 0b00100000 | interfaceLengthMask | linesMask | characterFontMask;
     this->send(RegisterSelect::COMMAND, commandBits);
 }
 
@@ -139,10 +143,20 @@ void CustomLiquidCrystal::clearDisplay() {
 }
 
 void CustomLiquidCrystal::setEntryMode(CursorDirection cursorDirection, DisplayShift displayShift) {
-    uint8_t commandBits = 0b00000100 | (cursorDirection << 1) | (displayShift << 0);
+
+    uint8_t cursorDirectionMask = static_cast<uint8_t>(cursorDirection) << 1;
+    uint8_t displayShiftMask = static_cast<uint8_t>(displayShift) << 0;
+
+    uint8_t commandBits = 0b00000100 | cursorDirectionMask | displayShiftMask;
     this->send(RegisterSelect::COMMAND, commandBits);
 }
 
 void CustomLiquidCrystal::setDisplayOn() {
     this->send(RegisterSelect::COMMAND, 0b00001100);
 }
+
+
+/*
+void CustomLiquidCrystal::setDisplay(Display display, CursorToggle cursorToggle, CursorBlink cursorBlink) {
+
+}*/

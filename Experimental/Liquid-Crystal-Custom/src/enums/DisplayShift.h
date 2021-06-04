@@ -9,9 +9,9 @@
  * NO -
  *
  * */
-enum DisplayShift {
-    YES = 1,
-    NO = 0
+enum class DisplayShift {
+    NO = 0,
+    YES = 1
 };
 
 #endif //LIQUID_CRYSTAL_CUSTOM_DISPLAYSHIFT_H

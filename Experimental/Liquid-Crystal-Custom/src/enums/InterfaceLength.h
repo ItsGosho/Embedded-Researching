@@ -4,7 +4,7 @@
 /**
  * Instruction bit name - DL
  */
-enum InterfaceLength {
+enum class InterfaceLength {
     FOUR_BIT = 0,
     EIGHT_BIT = 1,
 };

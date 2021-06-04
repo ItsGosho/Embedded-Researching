@@ -7,6 +7,9 @@
 #include "enums/CharacterFont.h"
 #include "enums/InterfaceLength.h"
 #include "enums/Lines.h"
+#include "enums/Display.h"
+#include "enums/CursorToggle.h"
+#include "enums/CursorBlink.h"
 #include "Arduino.h"
 #include "serialPrintF/SerialPrintF.h"
 
