@@ -80,7 +80,7 @@ void CustomLiquidCrystal::send(RegisterSelect registerSelect,
 }
 
 template<typename T, size_t N>
-void getBits(uint8_t value, T (& bits)[N]) {
+void CustomLiquidCrystal::getBits(uint8_t value, T (& bits)[N]) {
 
     int reverseCounterIndex = N - 1;
     while (value != 0) {
@@ -95,7 +95,7 @@ void getBits(uint8_t value, T (& bits)[N]) {
 void CustomLiquidCrystal::send(RegisterSelect registerSelect, int dataBusBits) {
 
     uint8_t bits[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    getBits(dataBusBits, bits);
+    this->getBits(dataBusBits, bits);
 
     this->send(registerSelect, bits[0], bits[1], bits[2], bits[3]);
     this->send(registerSelect, bits[4], bits[5], bits[6], bits[7]);
@@ -121,13 +121,6 @@ void CustomLiquidCrystal::initialize() {
     this->setEntryMode(CursorDirection::INCREMENT, DisplayShift::NO);
     this->setDisplay(Display::ON);
 }
-
-/*TODO: Some of them must be private, because they can be executed only on initilizatin as setting data length, number of lines and so on,. Check doc again for them!*/
-
-/*
- *
- *
- * */
 
 void CustomLiquidCrystal::set4BitInterface() {
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 0);

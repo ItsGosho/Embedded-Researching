@@ -70,6 +70,9 @@ private:
      * Cannot be used after initialization. Eg: It has only one-time usage.
      */
     void setFunction(InterfaceLength interfaceLength, Lines lines, CharacterFont characterFont);
+
+    template<typename T, size_t N>
+    void CustomLiquidCrystal::getBits(uint8_t value, T (& bits)[N]);
 };
 
 
