@@ -46,7 +46,7 @@ public:
 
     void initialize();
 
-    //void clearDisplay()
+    void clearDisplay();
 };
 
 
