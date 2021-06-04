@@ -132,11 +132,18 @@ int* get8Bits(int value) {
 }
 
 void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
+    Serial.println("Sending command!");
     int* bits = get8Bits(dataBusBits);
+    Serial.println("Got bits!");
 
     for (int i = 0; i < 8; ++i) {
 
         digitalWrite(this->bitsPinsMap[i].dbPin, *(bits + i));
+        Serial.print("Pin: ");
+        Serial.print(this->bitsPinsMap[i].dbPin);
+        Serial.print(" Value: ");
+        Serial.print(*(bits + i));
+        Serial.println("");
 
         if (i == 3 || i == 7) {
             digitalWrite(this->registerSyncPinNumber, LOW); // RS Type
@@ -144,13 +151,18 @@ void CustomLiquidCrystal::sendCommandNew(int dataBusBits) {
             delay(10);
             digitalWrite(this->enablePinNumber, LOW); // Set receiving off, pushing everything that came after on
             delay(10);
+            Serial.println("Pushed!");
         }
     }
 
+    Serial.println("Finished sending command!");
     delete[] bits;
+    Serial.println("Deleting bits!");
 }
 
 void CustomLiquidCrystal::initialize() {
+    delay(3000);
+
     delay(15);
 
     //this->sendCommandNew(0b00000011);
