@@ -51,13 +51,15 @@ void setup() {
     customLiquidCrystal.send(RegisterSelect::DATA, 0b01100111);
     customLiquidCrystal.send(RegisterSelect::DATA, 0b01101001);
 
+    customLiquidCrystal.toggleCursor(CursorToggle::ON);
     delay(3000);
 
-    customLiquidCrystal.setDisplayOff();
+    customLiquidCrystal.setDisplay(Display::OFF);
+    customLiquidCrystal.blinkCursor(CursorBlink::ON);
 
     delay(3000);
 
-    customLiquidCrystal.setDisplayOn();
+    customLiquidCrystal.setDisplay(Display::ON);
 
     delay(3000);
 

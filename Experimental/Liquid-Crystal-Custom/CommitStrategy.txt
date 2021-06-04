@@ -23,3 +23,4 @@ June 5:
 git commit -m "Added Instruction bit name doc to the enums. Moved the enums into a separate folder. Added setting for the Interface Length, Lines and Font" --date "2021-06-05T00:00:50"
 git commit -m "Fixed the display off command, which had a wrong bit" --date "2021-06-05T00:10:23"
 git commit -m "Changed the scope of the enumerations and adding 3 more for the blink, display and cursor" --date "2021-06-05T00:30:29"
+git commit -m "Gently exposed a separate and a combined one function for cursor toggle, blink and display on/off" --date "2021-06-05T01:25:13"

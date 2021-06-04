@@ -29,6 +29,10 @@ private:
     int dataBus1PinNumber;
     int dataBus0PinNumber;
 
+    Display display;
+    CursorToggle cursorToggle;
+    CursorBlink cursorBlink;
+
 public:
     CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
                         int dataBus6PinNumber, int dataBus5PinNumber, int dataBus4PinNumber);
@@ -43,9 +47,13 @@ public:
 
     void clearDisplay();
 
-    void setDisplayOff();
+    void setDisplay(Display display);
 
-    void setDisplayOn();
+    void setDisplay(Display display, CursorToggle cursorToggle, CursorBlink cursorBlink);
+
+    void toggleCursor(CursorToggle cursorToggle);
+
+    void blinkCursor(CursorBlink cursorBlink);
 
 private:
     void send(RegisterSelect registerSelect,

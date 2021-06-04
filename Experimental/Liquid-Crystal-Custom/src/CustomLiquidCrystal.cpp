@@ -1,5 +1,6 @@
 #include "CustomLiquidCrystal.h"
 
+/*TODO: Default constructor to move same initialization in it and call it from these?!*/
 CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
                                          int enablePinNumber,
                                          int dataBus7PinNumber,
@@ -17,6 +18,10 @@ CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
     pinMode(this->dataBus6PinNumber, OUTPUT);
     pinMode(this->dataBus5PinNumber, OUTPUT);
     pinMode(this->dataBus4PinNumber, OUTPUT);
+
+    this->display = Display::OFF;
+    this->cursorToggle = CursorToggle::OFF;
+    this->cursorBlink = CursorBlink::OFF;
 }
 
 CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
@@ -48,6 +53,10 @@ CustomLiquidCrystal::CustomLiquidCrystal(int registerSyncPinNumber,
     pinMode(this->dataBus2PinNumber, OUTPUT);
     pinMode(this->dataBus1PinNumber, OUTPUT);
     pinMode(this->dataBus0PinNumber, OUTPUT);
+
+    this->display = Display::OFF;
+    this->cursorToggle = CursorToggle::OFF;
+    this->cursorBlink = CursorBlink::OFF;
 }
 
 /*TODO: More abstract way*/
@@ -107,10 +116,10 @@ void CustomLiquidCrystal::initialize() {
 
     this->set4BitInterface();
     this->setFunction(InterfaceLength::FOUR_BIT, Lines::TWO, CharacterFont::FIVE_EIGHT);
-    this->setDisplayOff();
+    this->setDisplay(Display::OFF);
     this->clearDisplay();
     this->setEntryMode(CursorDirection::INCREMENT, DisplayShift::NO);
-    this->setDisplayOn();
+    this->setDisplay(Display::ON);
 }
 
 /*TODO: Some of them must be private, because they can be executed only on initilizatin as setting data length, number of lines and so on,. Check doc again for them!*/
@@ -133,11 +142,6 @@ void CustomLiquidCrystal::setFunction(InterfaceLength interfaceLength, Lines lin
     this->send(RegisterSelect::COMMAND, commandBits);
 }
 
-void CustomLiquidCrystal::setDisplayOff() {
-    //this->send(RegisterSelect::COMMAND, 0b00101000);
-    this->send(RegisterSelect::COMMAND, 0b00001000);
-}
-
 void CustomLiquidCrystal::clearDisplay() {
     this->send(RegisterSelect::COMMAND, 0b00000001);
 }
@@ -151,12 +155,27 @@ void CustomLiquidCrystal::setEntryMode(CursorDirection cursorDirection, DisplayS
     this->send(RegisterSelect::COMMAND, commandBits);
 }
 
-void CustomLiquidCrystal::setDisplayOn() {
-    this->send(RegisterSelect::COMMAND, 0b00001100);
+void CustomLiquidCrystal::setDisplay(Display display) {
+    this->setDisplay(display, this->cursorToggle, this->cursorBlink);
 }
 
+void CustomLiquidCrystal::toggleCursor(CursorToggle cursorToggle) {
+    this->setDisplay(this->display, cursorToggle, this->cursorBlink);
+}
 
-/*
+void CustomLiquidCrystal::blinkCursor(CursorBlink cursorBlink) {
+    this->setDisplay(this->display, this->cursorToggle, cursorBlink);
+}
+
 void CustomLiquidCrystal::setDisplay(Display display, CursorToggle cursorToggle, CursorBlink cursorBlink) {
+    uint8_t displayMask = static_cast<uint8_t>(display) << 2;
+    uint8_t cursorToggleMask = static_cast<uint8_t>(cursorToggle) << 1;
+    uint8_t cursorBlinkMask = static_cast<uint8_t>(cursorBlink) << 0;
 
-}*/
+    uint8_t commandBits = 0b00001000 | displayMask | cursorToggleMask | cursorBlinkMask;
+    this->send(RegisterSelect::COMMAND, commandBits);
+
+    this->display = display;
+    this->cursorToggle = cursorToggle;
+    this->cursorBlink = cursorBlink;
+}
