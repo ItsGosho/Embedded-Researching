@@ -76,6 +76,8 @@ private:
 
     template<typename T, size_t N>
     void CustomLiquidCrystal::getBits(byte value, T (& bits)[N]);
+
+    void set4BitMode();
 };
 
 

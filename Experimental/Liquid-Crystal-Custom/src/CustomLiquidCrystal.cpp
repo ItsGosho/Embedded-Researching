@@ -102,6 +102,15 @@ void CustomLiquidCrystal::send(RegisterSelect registerSelect, byte dataBusBits) 
 }
 
 void CustomLiquidCrystal::initialize() {
+    this->set4BitMode();
+    this->setFunction(InterfaceLength::FOUR_BIT, Lines::TWO, CharacterFont::FIVE_EIGHT);
+    this->setDisplay(Display::OFF);
+    this->clearDisplay();
+    this->setEntryMode(CursorDirection::INCREMENT, DisplayShift::NO);
+    this->setDisplay(Display::ON);
+}
+
+void CustomLiquidCrystal::set4BitMode() {
     delay(15);
 
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
@@ -115,11 +124,6 @@ void CustomLiquidCrystal::initialize() {
     this->send(RegisterSelect::COMMAND, 0, 0, 1, 1);
 
     this->set4BitInterface();
-    this->setFunction(InterfaceLength::FOUR_BIT, Lines::TWO, CharacterFont::FIVE_EIGHT);
-    this->setDisplay(Display::OFF);
-    this->clearDisplay();
-    this->setEntryMode(CursorDirection::INCREMENT, DisplayShift::NO);
-    this->setDisplay(Display::ON);
 }
 
 void CustomLiquidCrystal::set4BitInterface() {
