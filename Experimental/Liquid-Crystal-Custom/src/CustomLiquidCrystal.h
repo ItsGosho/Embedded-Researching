@@ -18,33 +18,33 @@ class CustomLiquidCrystal {
 
     /*TODO: Add each existing pin number here, so that it can be controlled from the library :)*/
 private:
-    int registerSyncPinNumber;
-    int enablePinNumber;
+    byte registerSyncPinNumber;
+    byte enablePinNumber;
 
-    int dataBus7PinNumber;
-    int dataBus6PinNumber;
-    int dataBus5PinNumber;
-    int dataBus4PinNumber;
-    int dataBus3PinNumber;
-    int dataBus2PinNumber;
-    int dataBus1PinNumber;
-    int dataBus0PinNumber;
+    byte dataBus7PinNumber;
+    byte dataBus6PinNumber;
+    byte dataBus5PinNumber;
+    byte dataBus4PinNumber;
+    byte dataBus3PinNumber;
+    byte dataBus2PinNumber;
+    byte dataBus1PinNumber;
+    byte dataBus0PinNumber;
 
     Display display;
     CursorToggle cursorToggle;
     CursorBlink cursorBlink;
 
 public:
-    CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
-                        int dataBus6PinNumber, int dataBus5PinNumber, int dataBus4PinNumber);
+    CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
+                        byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber);
 
-    CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
-                        int dataBus6PinNumber, int dataBus5PinNumber, int dataBus4PinNumber, int dataBus3PinNumber,
-                        int dataBus2PinNumber, int dataBus1PinNumber, int dataBus0PinNumber);
+    CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
+                        byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber, byte dataBus3PinNumber,
+                        byte dataBus2PinNumber, byte dataBus1PinNumber, byte dataBus0PinNumber);
 
     void sendText(const String& string);
 
-    void send(RegisterSelect registerSelect, int value);
+    void send(RegisterSelect registerSelect, byte value);
 
     void initialize();
 
@@ -60,10 +60,10 @@ public:
 
 private:
     void send(RegisterSelect registerSelect,
-              int dataBus7PinValue,
-              int dataBus6PinValue,
-              int dataBus5PinValue,
-              int dataBus4PinValue);
+              byte dataBus7PinValue,
+              byte dataBus6PinValue,
+              byte dataBus5PinValue,
+              byte dataBus4PinValue);
 
     void set4BitInterface();
 
@@ -75,7 +75,7 @@ private:
     void setFunction(InterfaceLength interfaceLength, Lines lines, CharacterFont characterFont);
 
     template<typename T, size_t N>
-    void CustomLiquidCrystal::getBits(uint8_t value, T (& bits)[N]);
+    void CustomLiquidCrystal::getBits(byte value, T (& bits)[N]);
 };
 
 

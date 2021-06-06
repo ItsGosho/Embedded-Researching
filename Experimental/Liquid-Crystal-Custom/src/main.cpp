@@ -59,7 +59,7 @@ void setup() {
     customLiquidCrystal.initialize();
     /*TODO: Clear when initializing*/
 
-    customLiquidCrystal.sendText("Joreto!");
+    customLiquidCrystal.sendText("Tina");
     customLiquidCrystal.sendText(" BG");
 
     /*customLiquidCrystal.send(RegisterSelect::DATA, 0b01001000);
