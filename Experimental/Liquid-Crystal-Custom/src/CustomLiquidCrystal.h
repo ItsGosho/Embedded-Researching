@@ -12,6 +12,7 @@
 #include "enums/CursorBlink.h"
 #include "Arduino.h"
 #include "serialPrintF/SerialPrintF.h"
+#include "string.h"
 
 class CustomLiquidCrystal {
 
@@ -40,6 +41,8 @@ public:
     CustomLiquidCrystal(int registerSyncPinNumber, int enablePinNumber, int dataBus7PinNumber,
                         int dataBus6PinNumber, int dataBus5PinNumber, int dataBus4PinNumber, int dataBus3PinNumber,
                         int dataBus2PinNumber, int dataBus1PinNumber, int dataBus0PinNumber);
+
+    void sendText(const String& string);
 
     void send(RegisterSelect registerSelect, int value);
 

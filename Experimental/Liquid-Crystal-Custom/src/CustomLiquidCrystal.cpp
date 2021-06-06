@@ -172,3 +172,9 @@ void CustomLiquidCrystal::setDisplay(Display display, CursorToggle cursorToggle,
     this->cursorToggle = cursorToggle;
     this->cursorBlink = cursorBlink;
 }
+
+void CustomLiquidCrystal::sendText(const String& string) {
+
+    for (const char& character : string)
+        this->send(RegisterSelect::DATA, character);
+}

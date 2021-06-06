@@ -25,3 +25,6 @@ git commit -m "Fixed the display off command, which had a wrong bit" --date "202
 git commit -m "Changed the scope of the enumerations and adding 3 more for the blink, display and cursor" --date "2021-06-05T00:30:29"
 git commit -m "Gently exposed a separate and a combined one function for cursor toggle, blink and display on/off" --date "2021-06-05T01:25:13"
 git commit -m "Moved the getBits logic into the class and made her private" --date "2021-06-05T01:35:13"
+
+June 6:
+git commit -m "Exposed a method for sending " --date "2021-06-06T10:15:43"
