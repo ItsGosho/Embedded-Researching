@@ -1,29 +1,22 @@
 #include "CustomLiquidCrystal.h"
 
 /*TODO: Default constructor to move same initialization in it and call it from these?!*/
+
 CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
                                          byte enablePinNumber,
                                          byte dataBus7PinNumber,
                                          byte dataBus6PinNumber,
                                          byte dataBus5PinNumber,
-                                         byte dataBus4PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
-                                                                   enablePinNumber(enablePinNumber),
-                                                                   dataBus7PinNumber(dataBus7PinNumber),
-                                                                   dataBus6PinNumber(dataBus6PinNumber),
-                                                                   dataBus5PinNumber(dataBus5PinNumber),
-                                                                   dataBus4PinNumber(dataBus4PinNumber) {
-    pinMode(this->registerSyncPinNumber, OUTPUT);
-    pinMode(this->enablePinNumber, OUTPUT);
-    pinMode(this->dataBus7PinNumber, OUTPUT);
-    pinMode(this->dataBus6PinNumber, OUTPUT);
-    pinMode(this->dataBus5PinNumber, OUTPUT);
-    pinMode(this->dataBus4PinNumber, OUTPUT);
-
-    this->display = Display::OFF;
-    this->cursorToggle = CursorToggle::OFF;
-    this->cursorBlink = CursorBlink::OFF;
-    this->cursorRow = 0;
-    this->cursorColumn = 0;
+                                         byte dataBus4PinNumber) : CustomLiquidCrystal(registerSyncPinNumber,
+                                                                                       enablePinNumber,
+                                                                                       dataBus7PinNumber,
+                                                                                       dataBus6PinNumber,
+                                                                                       dataBus5PinNumber,
+                                                                                       dataBus4PinNumber,
+                                                                                       -1,
+                                                                                       -1,
+                                                                                       -1,
+                                                                                       -1) {
 }
 
 CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
