@@ -7,11 +7,11 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
                                          byte dataBus6PinNumber,
                                          byte dataBus5PinNumber,
                                          byte dataBus4PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
-                                                                  enablePinNumber(enablePinNumber),
-                                                                  dataBus7PinNumber(dataBus7PinNumber),
-                                                                  dataBus6PinNumber(dataBus6PinNumber),
-                                                                  dataBus5PinNumber(dataBus5PinNumber),
-                                                                  dataBus4PinNumber(dataBus4PinNumber) {
+                                                                   enablePinNumber(enablePinNumber),
+                                                                   dataBus7PinNumber(dataBus7PinNumber),
+                                                                   dataBus6PinNumber(dataBus6PinNumber),
+                                                                   dataBus5PinNumber(dataBus5PinNumber),
+                                                                   dataBus4PinNumber(dataBus4PinNumber) {
     pinMode(this->registerSyncPinNumber, OUTPUT);
     pinMode(this->enablePinNumber, OUTPUT);
     pinMode(this->dataBus7PinNumber, OUTPUT);
@@ -22,6 +22,7 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
     this->display = Display::OFF;
     this->cursorToggle = CursorToggle::OFF;
     this->cursorBlink = CursorBlink::OFF;
+    this->characterCursor = 0;
 }
 
 CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
@@ -34,15 +35,15 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
                                          byte dataBus2PinNumber,
                                          byte dataBus1PinNumber,
                                          byte dataBus0PinNumber) : registerSyncPinNumber(registerSyncPinNumber),
-                                                                  enablePinNumber(enablePinNumber),
-                                                                  dataBus7PinNumber(dataBus7PinNumber),
-                                                                  dataBus6PinNumber(dataBus6PinNumber),
-                                                                  dataBus5PinNumber(dataBus5PinNumber),
-                                                                  dataBus4PinNumber(dataBus4PinNumber),
-                                                                  dataBus3PinNumber(dataBus3PinNumber),
-                                                                  dataBus2PinNumber(dataBus2PinNumber),
-                                                                  dataBus1PinNumber(dataBus1PinNumber),
-                                                                  dataBus0PinNumber(dataBus0PinNumber) {
+                                                                   enablePinNumber(enablePinNumber),
+                                                                   dataBus7PinNumber(dataBus7PinNumber),
+                                                                   dataBus6PinNumber(dataBus6PinNumber),
+                                                                   dataBus5PinNumber(dataBus5PinNumber),
+                                                                   dataBus4PinNumber(dataBus4PinNumber),
+                                                                   dataBus3PinNumber(dataBus3PinNumber),
+                                                                   dataBus2PinNumber(dataBus2PinNumber),
+                                                                   dataBus1PinNumber(dataBus1PinNumber),
+                                                                   dataBus0PinNumber(dataBus0PinNumber) {
     pinMode(this->registerSyncPinNumber, OUTPUT);
     pinMode(this->enablePinNumber, OUTPUT);
     pinMode(this->dataBus7PinNumber, OUTPUT);
@@ -57,6 +58,7 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
     this->display = Display::OFF;
     this->cursorToggle = CursorToggle::OFF;
     this->cursorBlink = CursorBlink::OFF;
+    this->characterCursor = 0;
 }
 
 /*TODO: More abstract way*/
@@ -65,6 +67,10 @@ void CustomLiquidCrystal::send(RegisterSelect registerSelect,
                                byte dataBus6PinValue,
                                byte dataBus5PinValue,
                                byte dataBus4PinValue) {
+
+    if (RegisterSelect::COMMAND == registerSelect) {
+
+    }
 
     /*TODO: Prepare bus lines, set rs, enable, disable*/
     digitalWrite(this->dataBus7PinNumber, dataBus7PinValue);
@@ -156,6 +162,7 @@ void CustomLiquidCrystal::setDisplay(Display display) {
     this->setDisplay(display, this->cursorToggle, this->cursorBlink);
 }
 
+/*TODO: new easy method => cursor (toggle, blink)*/
 void CustomLiquidCrystal::toggleCursor(CursorToggle cursorToggle) {
     this->setDisplay(this->display, cursorToggle, this->cursorBlink);
 }
@@ -179,6 +186,27 @@ void CustomLiquidCrystal::setDisplay(Display display, CursorToggle cursorToggle,
 
 void CustomLiquidCrystal::sendText(const String& string) {
 
-    for (const char& character : string)
+    for (const char& character : string) {
         this->send(RegisterSelect::DATA, character);
+        this->incrementCursor();
+    }
+}
+
+void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
+    this->send(RegisterSelect::DATA, characterIndex);
+    this->incrementCursor();
+}
+
+int CustomLiquidCrystal::incrementCursor() {
+    //TODO: If the cursor is bigger than 16 (This will be variable, which is defined by the number of lines, each having X places)
+
+    //TODO: Try with bitwise
+    if(this->characterCursor > 15)
+        this->characterCursor = 0;
+
+    this->characterCursor++;
+}
+
+int CustomLiquidCrystal::getCursorPosition() {
+    return this->characterCursor;
 }

@@ -30,3 +30,6 @@ June 6:
 git commit -m "Exposed a method for sending text, which simplifies the end-user" --date "2021-06-06T10:15:43"
 git commit -m "Changed int and uint_8 to use byte, because int is using unnecessary memory" --date "2021-06-06T10:17:32"
 git commit -m "Refactored part of the initialization - grouping a logic into separate method" --date "2021-06-06T10:32:01"
+
+June 7:
+git commit -m "Added sketch for the creation of a custom character" --date "2021-06-07T13:00:31"

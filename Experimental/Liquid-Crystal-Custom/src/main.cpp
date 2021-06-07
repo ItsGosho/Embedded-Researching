@@ -55,30 +55,50 @@ void testCycle() {
     customLiquidCrystal.send(RegisterSelect::DATA, 0b00110010);
 }
 
+/*
+ * TODO:
+ * For each create custom character, you must return back to DD-RAM, but we must somehow know the position of the cursor which it was on.
+ *
+ * */
+void createCustomCharacter(const byte& characterIndex, byte customCharacter[]) {
+
+    //Check if the char index is not bigger that 8/6 depending on the size of pixels per block
+    //Select the CG-RAM Index
+    //customLiquidCrystal.send(RegisterSelect::COMMAND, 0b01000000);
+    customLiquidCrystal.send(RegisterSelect::COMMAND, (0b01000000) | (characterIndex << 3));
+
+    for (int i = 0; i < 8; ++i) {
+        customLiquidCrystal.send(RegisterSelect::DATA, customCharacter[i]);
+    }
+
+    int cursorPosition = customLiquidCrystal.getCursorPosition();
+    customLiquidCrystal.send(RegisterSelect::COMMAND, 0b10000000 | cursorPosition);
+}
+
 void setup() {
+    /*TODO: Move automatically into the constructor*/
     customLiquidCrystal.initialize();
-    /*TODO: Clear when initializing*/
 
-    customLiquidCrystal.sendText("Tina");
-    customLiquidCrystal.sendText(" BG");
+    customLiquidCrystal.sendText("Hello Word! This is Bulgaria :)");
 
-    /*customLiquidCrystal.send(RegisterSelect::DATA, 0b01001000);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100101);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101100);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101100);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101111);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b00110010);
+    byte customChar[] = {
+            0b00000,
+            0b01010,
+            0b00000,
+            0b10001,
+            0b01110,
+            0b00000,
+            0b00000,
+            0b00000
+    };
 
+    //createCustomCharacter(0, customChar);
 
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b00100000);
+    //customLiquidCrystal.sendText("123456789");
+    //customLiquidCrystal.sendCharacter(0);
+    /*TODO: Test if we keep the cursor correctly after 16 is passed*/
 
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b00100000);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01000111);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100101);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101111);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01110010);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01100111);
-    customLiquidCrystal.send(RegisterSelect::DATA, 0b01101001);*/
+    //customLiquidCrystal.send(RegisterSelect::DATA, 0b00000000);
 }
 
 //1001001101

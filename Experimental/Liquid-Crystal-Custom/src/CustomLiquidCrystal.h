@@ -34,6 +34,8 @@ private:
     CursorToggle cursorToggle;
     CursorBlink cursorBlink;
 
+    int characterCursor;
+
 public:
     CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
                         byte dataBus6PinNumber, byte dataBus5PinNumber, byte dataBus4PinNumber);
@@ -43,6 +45,8 @@ public:
                         byte dataBus2PinNumber, byte dataBus1PinNumber, byte dataBus0PinNumber);
 
     void sendText(const String& string);
+
+    void sendCharacter(const byte &characterIndex);
 
     void send(RegisterSelect registerSelect, byte value);
 
@@ -58,6 +62,8 @@ public:
 
     void blinkCursor(CursorBlink cursorBlink);
 
+    //TODO: Delete
+    int getCursorPosition();
 private:
     void send(RegisterSelect registerSelect,
               byte dataBus7PinValue,
@@ -78,6 +84,8 @@ private:
     void CustomLiquidCrystal::getBits(byte value, T (& bits)[N]);
 
     void set4BitMode();
+
+    int incrementCursor();
 };
 
 
