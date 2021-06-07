@@ -87,6 +87,11 @@ private:
     void CustomLiquidCrystal::getBits(byte value, T (& bits)[N]);
 
     void set4BitMode();
+
+    template<typename T, size_t N>
+    void CustomLiquidCrystal::setPinsMode(T (& pinNumbers)[N], const byte& mode);
+
+    void setCommunicationPinsToOutput();
 };
 
 

@@ -38,17 +38,7 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
                                                                    dataBus2PinNumber(dataBus2PinNumber),
                                                                    dataBus1PinNumber(dataBus1PinNumber),
                                                                    dataBus0PinNumber(dataBus0PinNumber) {
-    pinMode(this->registerSyncPinNumber, OUTPUT);
-    pinMode(this->enablePinNumber, OUTPUT);
-    pinMode(this->dataBus7PinNumber, OUTPUT);
-    pinMode(this->dataBus6PinNumber, OUTPUT);
-    pinMode(this->dataBus5PinNumber, OUTPUT);
-    pinMode(this->dataBus4PinNumber, OUTPUT);
-    pinMode(this->dataBus3PinNumber, OUTPUT);
-    pinMode(this->dataBus2PinNumber, OUTPUT);
-    pinMode(this->dataBus1PinNumber, OUTPUT);
-    pinMode(this->dataBus0PinNumber, OUTPUT);
-
+    this->setCommunicationPinsToOutput();
     this->display = Display::OFF;
     this->cursorToggle = CursorToggle::OFF;
     this->cursorBlink = CursorBlink::OFF;
@@ -166,6 +156,13 @@ void CustomLiquidCrystal::blinkCursor(CursorBlink cursorBlink) {
     this->setDisplay(this->display, this->cursorToggle, cursorBlink);
 }
 
+template<typename T, size_t N>
+void CustomLiquidCrystal::setPinsMode(T (& pinNumbers)[N], const byte& mode) {
+    for (size_t i = 0; i < N; i++) {
+        pinMode(pinNumbers[i], mode);
+    }
+}
+
 void CustomLiquidCrystal::setCursorPosition(int row, int column) {
 
     /*TODO: With bitwise!*/
@@ -245,4 +242,19 @@ void CustomLiquidCrystal::createCustomCharacter(const byte& characterIndex, byte
         this->send(RegisterSelect::DATA, customCharacter[i]);
 
     this->setCursorPosition(this->cursorRow, this->cursorColumn);
+}
+
+void CustomLiquidCrystal::setCommunicationPinsToOutput() {
+    byte communicationPins[] = {this->registerSyncPinNumber,
+                                this->enablePinNumber,
+                                this->dataBus7PinNumber,
+                                this->dataBus6PinNumber,
+                                this->dataBus5PinNumber,
+                                this->dataBus4PinNumber,
+                                this->dataBus3PinNumber,
+                                this->dataBus2PinNumber,
+                                this->dataBus1PinNumber,
+                                this->dataBus0PinNumber};
+
+    this->setPinsMode(communicationPins, OUTPUT);
 }
