@@ -71,18 +71,14 @@ void createCustomCharacter(const byte& characterIndex, byte customCharacter[]) {
         customLiquidCrystal.send(RegisterSelect::DATA, customCharacter[i]);
     }
 
-    int cursorPosition = customLiquidCrystal.getCursorPosition();
-    customLiquidCrystal.send(RegisterSelect::COMMAND, 0b10000000 | cursorPosition);
+    customLiquidCrystal.setCursorPosition(customLiquidCrystal.getCursorRow(), customLiquidCrystal.getCursorColumn());
 }
 
 void setup() {
     /*TODO: Move automatically into the constructor*/
     customLiquidCrystal.initialize();
 
-    customLiquidCrystal.sendText("Hello Word! This is Bulgaria :)");
-    //The bit after 1 is the line number
-    customLiquidCrystal.setCursorPosition(1, 2000);
-    customLiquidCrystal.sendText("K");
+    customLiquidCrystal.sendText("Hello World! This is Bulgaria :)Hello World! This is Bulgaria 2!ZZZZZZZZZZZZZZZ12");
 
     byte customChar[] = {
             0b00000,
@@ -95,13 +91,9 @@ void setup() {
             0b00000
     };
 
-    //createCustomCharacter(0, customChar);
+    createCustomCharacter(0, customChar);
 
-    //customLiquidCrystal.sendText("123456789");
-    //customLiquidCrystal.sendCharacter(0);
-    /*TODO: Test if we keep the cursor correctly after 16 is passed*/
-
-    //customLiquidCrystal.send(RegisterSelect::DATA, 0b00000000);
+    customLiquidCrystal.sendCharacter(0);
 }
 
 //1001001101

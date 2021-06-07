@@ -34,7 +34,8 @@ private:
     CursorToggle cursorToggle;
     CursorBlink cursorBlink;
 
-    int characterCursor;
+    int cursorRow = 0;
+    int cursorColumn = 0;
 
 public:
     CustomLiquidCrystal(byte registerSyncPinNumber, byte enablePinNumber, byte dataBus7PinNumber,
@@ -64,8 +65,9 @@ public:
 
     void setCursorPosition(int row, int column);
 
-    //TODO: Delete
-    int getCursorPosition();
+    int getCursorRow();
+
+    int getCursorColumn();
 private:
     void send(RegisterSelect registerSelect,
               byte dataBus7PinValue,
@@ -87,7 +89,9 @@ private:
 
     void set4BitMode();
 
-    int incrementCursor();
+    int incrementCursorColumn();
+
+    void setCursorPositionByCounter();
 };
 
 

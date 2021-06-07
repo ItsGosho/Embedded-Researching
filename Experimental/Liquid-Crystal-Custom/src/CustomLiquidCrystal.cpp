@@ -22,7 +22,8 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
     this->display = Display::OFF;
     this->cursorToggle = CursorToggle::OFF;
     this->cursorBlink = CursorBlink::OFF;
-    this->characterCursor = 0;
+    this->cursorRow = 0;
+    this->cursorColumn = 0;
 }
 
 CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
@@ -58,7 +59,8 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
     this->display = Display::OFF;
     this->cursorToggle = CursorToggle::OFF;
     this->cursorBlink = CursorBlink::OFF;
-    this->characterCursor = 0;
+    this->cursorRow = 0;
+    this->cursorColumn = 0;
 }
 
 /*TODO: More abstract way*/
@@ -197,25 +199,59 @@ void CustomLiquidCrystal::sendText(const String& string) {
 
     for (const char& character : string) {
         this->send(RegisterSelect::DATA, character);
-        this->incrementCursor();
+
+        /*TODO: Refactor*/
+        this->cursorColumn++;
+
+        if (this->cursorColumn > 15) {
+            this->cursorColumn = 0;
+            this->cursorRow++;
+
+            if(this->cursorRow > 1) {
+                this->cursorRow = 0;
+            }
+
+            this->setCursorPosition(this->cursorRow, this->cursorColumn);
+        }
     }
 }
 
 void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
     this->send(RegisterSelect::DATA, characterIndex);
-    this->incrementCursor();
+
+    /*TODO: Refactor*/
+    this->cursorColumn++;
+
+    if (this->cursorColumn > 15) {
+        this->cursorColumn = 0;
+        this->cursorRow++;
+
+        if(this->cursorRow > 1) {
+            this->cursorRow = 0;
+        }
+
+        this->setCursorPosition(this->cursorRow, this->cursorColumn);
+    }
 }
 
-int CustomLiquidCrystal::incrementCursor() {
-    //TODO: If the cursor is bigger than 31 (This will be variable, which is defined by the number of lines, each having X places)
+int CustomLiquidCrystal::incrementCursorColumn() {
+    //TODO: If the cursor is bigger than 15 (This will be variable, which is defined by the number of lines, each having X places)
 
     //TODO: Try with bitwise
-    if (this->characterCursor > 31)
-        this->characterCursor = 0;
+    if (this->cursorColumn > 15)
+        this->cursorColumn = 0;
 
-    this->characterCursor++;
+    this->cursorColumn++;
 }
 
-int CustomLiquidCrystal::getCursorPosition() {
-    return this->characterCursor;
+void CustomLiquidCrystal::setCursorPositionByCounter() {
+    /*TODO: We must note if the */
+}
+
+int CustomLiquidCrystal::getCursorRow() {
+    return this->cursorRow;
+}
+
+int CustomLiquidCrystal::getCursorColumn() {
+    return this->cursorColumn;
 }
