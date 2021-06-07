@@ -80,6 +80,9 @@ void setup() {
     customLiquidCrystal.initialize();
 
     customLiquidCrystal.sendText("Hello Word! This is Bulgaria :)");
+    //The bit after 1 is the line number
+    customLiquidCrystal.setCursorPosition(1, 2000);
+    customLiquidCrystal.sendText("K");
 
     byte customChar[] = {
             0b00000,

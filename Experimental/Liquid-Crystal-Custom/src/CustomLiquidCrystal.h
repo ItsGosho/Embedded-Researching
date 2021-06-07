@@ -62,6 +62,8 @@ public:
 
     void blinkCursor(CursorBlink cursorBlink);
 
+    void setCursorPosition(int row, int column);
+
     //TODO: Delete
     int getCursorPosition();
 private:

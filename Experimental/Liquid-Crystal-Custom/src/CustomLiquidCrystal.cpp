@@ -171,6 +171,15 @@ void CustomLiquidCrystal::blinkCursor(CursorBlink cursorBlink) {
     this->setDisplay(this->display, this->cursorToggle, cursorBlink);
 }
 
+void CustomLiquidCrystal::setCursorPosition(int row, int column) {
+
+    /*TODO: With bitwise!*/
+    row = row > 1 ? 1 : row;
+    column = column > 15 ? 15 : column;
+
+    this->send(RegisterSelect::COMMAND, (0b10000000) | (row << 6) | column);
+}
+
 void CustomLiquidCrystal::setDisplay(Display display, CursorToggle cursorToggle, CursorBlink cursorBlink) {
     byte displayMask = static_cast<byte>(display) << 2;
     byte cursorToggleMask = static_cast<byte>(cursorToggle) << 1;
@@ -198,10 +207,10 @@ void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
 }
 
 int CustomLiquidCrystal::incrementCursor() {
-    //TODO: If the cursor is bigger than 16 (This will be variable, which is defined by the number of lines, each having X places)
+    //TODO: If the cursor is bigger than 31 (This will be variable, which is defined by the number of lines, each having X places)
 
     //TODO: Try with bitwise
-    if(this->characterCursor > 15)
+    if (this->characterCursor > 31)
         this->characterCursor = 0;
 
     this->characterCursor++;
