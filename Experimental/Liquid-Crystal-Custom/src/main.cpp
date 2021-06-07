@@ -60,6 +60,7 @@ void testCycle() {
  * For each create custom character, you must return back to DD-RAM, but we must somehow know the position of the cursor which it was on.
  *
  * */
+//TODO: Maybe we can expose by name. Hold it somewhere and internaly get the index "Smile" -> 0
 void createCustomCharacter(const byte& characterIndex, byte customCharacter[]) {
 
     //Check if the char index is not bigger that 8/6 depending on the size of pixels per block
@@ -91,9 +92,25 @@ void setup() {
             0b00000
     };
 
+    byte customChar2[] = {
+            0b00000,
+            0b01010,
+            0b00000,
+            0b10001,
+            0b01110,
+            0b00000,
+            0b01110,
+            0b00000
+    };
+
     createCustomCharacter(0, customChar);
 
     customLiquidCrystal.sendCharacter(0);
+    customLiquidCrystal.sendText("->");
+
+    createCustomCharacter(1, customChar2);
+
+    customLiquidCrystal.sendCharacter(1);
 }
 
 //1001001101

@@ -88,10 +88,6 @@ private:
     void CustomLiquidCrystal::getBits(byte value, T (& bits)[N]);
 
     void set4BitMode();
-
-    int incrementCursorColumn();
-
-    void setCursorPositionByCounter();
 };
 
 

@@ -216,6 +216,7 @@ void CustomLiquidCrystal::sendText(const String& string) {
     }
 }
 
+//TODO: Maybe we can expose by name. Hold it somewhere and internaly get the index "Smile" -> 0
 void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
     this->send(RegisterSelect::DATA, characterIndex);
 
@@ -232,20 +233,6 @@ void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
 
         this->setCursorPosition(this->cursorRow, this->cursorColumn);
     }
-}
-
-int CustomLiquidCrystal::incrementCursorColumn() {
-    //TODO: If the cursor is bigger than 15 (This will be variable, which is defined by the number of lines, each having X places)
-
-    //TODO: Try with bitwise
-    if (this->cursorColumn > 15)
-        this->cursorColumn = 0;
-
-    this->cursorColumn++;
-}
-
-void CustomLiquidCrystal::setCursorPositionByCounter() {
-    /*TODO: We must note if the */
 }
 
 int CustomLiquidCrystal::getCursorRow() {
