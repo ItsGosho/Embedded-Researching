@@ -207,7 +207,7 @@ void CustomLiquidCrystal::sendText(const String& string) {
             this->cursorColumn = 0;
             this->cursorRow++;
 
-            if(this->cursorRow > 1) {
+            if (this->cursorRow > 1) {
                 this->cursorRow = 0;
             }
 
@@ -227,7 +227,7 @@ void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
         this->cursorColumn = 0;
         this->cursorRow++;
 
-        if(this->cursorRow > 1) {
+        if (this->cursorRow > 1) {
             this->cursorRow = 0;
         }
 
@@ -235,10 +235,21 @@ void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
     }
 }
 
-int CustomLiquidCrystal::getCursorRow() {
-    return this->cursorRow;
-}
+/*
+ * TODO:
+ * For each create custom character, you must return back to DD-RAM, but we must somehow know the position of the cursor which it was on.
+ *
+ * */
+//TODO: Maybe we can expose by name. Hold it somewhere and internaly get the index "Smile" -> 0
+void CustomLiquidCrystal::createCustomCharacter(const byte& characterIndex, byte customCharacter[]) {
 
-int CustomLiquidCrystal::getCursorColumn() {
-    return this->cursorColumn;
+    //Check if the char index is not bigger that 8/6 depending on the size of pixels per block
+    //Select the CG-RAM Index
+    //customLiquidCrystal.send(RegisterSelect::COMMAND, 0b01000000);
+    this->send(RegisterSelect::COMMAND, (0b01000000) | (characterIndex << 3));
+
+    for (int i = 0; i < 8; ++i)
+        this->send(RegisterSelect::DATA, customCharacter[i]);
+
+    this->setCursorPosition(this->cursorRow, this->cursorColumn);
 }

@@ -47,7 +47,7 @@ public:
 
     void sendText(const String& string);
 
-    void sendCharacter(const byte &characterIndex);
+    void sendCharacter(const byte& characterIndex);
 
     void send(RegisterSelect registerSelect, byte value);
 
@@ -65,9 +65,8 @@ public:
 
     void setCursorPosition(int row, int column);
 
-    int getCursorRow();
+    void createCustomCharacter(const byte& characterIndex, byte customCharacter[]);
 
-    int getCursorColumn();
 private:
     void send(RegisterSelect registerSelect,
               byte dataBus7PinValue,

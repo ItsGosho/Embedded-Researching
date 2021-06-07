@@ -36,3 +36,4 @@ git commit -m "Added sketch for the creation of a custom character" --date "2021
 git commit -m "Created a set cursor logic" --date "2021-06-07T13:10:25"
 git commit -m "Added the cursor row/column tracking option, which is used to rever from CG/DD RAM mode" --date "2021-06-07T13:30:01"
 git commit -m "Removed unused methods" --date "2021-06-07T13:41:23"
+git commit -m "Moved the logic for creating custom character into the class" --date "2021-06-07T13:50:55"
