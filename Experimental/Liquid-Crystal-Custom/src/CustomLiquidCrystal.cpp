@@ -17,6 +17,7 @@ CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
                                                                                        -1,
                                                                                        -1,
                                                                                        -1) {
+
 }
 
 CustomLiquidCrystal::CustomLiquidCrystal(byte registerSyncPinNumber,
@@ -53,11 +54,6 @@ void CustomLiquidCrystal::send(RegisterSelect registerSelect,
                                byte dataBus5PinValue,
                                byte dataBus4PinValue) {
 
-    if (RegisterSelect::COMMAND == registerSelect) {
-
-    }
-
-    /*TODO: Prepare bus lines, set rs, enable, disable*/
     digitalWrite(this->dataBus7PinNumber, dataBus7PinValue);
     digitalWrite(this->dataBus6PinNumber, dataBus6PinValue);
     digitalWrite(this->dataBus5PinNumber, dataBus5PinValue);
@@ -225,11 +221,6 @@ void CustomLiquidCrystal::sendCharacter(const byte& characterIndex) {
     }
 }
 
-/*
- * TODO:
- * For each create custom character, you must return back to DD-RAM, but we must somehow know the position of the cursor which it was on.
- *
- * */
 //TODO: Maybe we can expose by name. Hold it somewhere and internaly get the index "Smile" -> 0
 void CustomLiquidCrystal::createCustomCharacter(const byte& characterIndex, byte customCharacter[]) {
 
