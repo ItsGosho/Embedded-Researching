@@ -22,7 +22,7 @@ public class Main {
             sendMessage(arduinoSerial, (byte) 22);
 
             /*TODO: Защо трябва да не го зоря толкова иначе не минава?!*/
-            Thread.sleep(25);
+            Thread.sleep(10);
 
             byte[] readBuffer = new byte[4];
             arduinoSerial.readBytes(readBuffer, readBuffer.length);
