@@ -12,6 +12,6 @@ public class DataListener implements SerialPortDataListener {
 
         byte[] newData = serialPortEvent.getReceivedData();
         for (int i = 0; i < newData.length; ++i)
-            System.out.print((char)newData[i]);
+            System.out.print((char) newData[i]);
     }
 }
