@@ -15,19 +15,29 @@ public class ArduinoSerialCommunication {
 
     private SerialPort arduinoSerial;
 
-    public void start() throws IOException {
+    public void start() throws IOException, InterruptedException {
         this.arduinoSerial = SerialPort.getCommPort(PORT_NAME);
         this.arduinoSerial.openPort();
         this.arduinoSerial.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
 
         /*TODO: да де но сега пък не работи синхронизацията с това блокиране!?*/
 
-        //this.synchronize();
+        /*TODO: On simple sync just start*/
+        //Thread.sleep(1500);
+
 
         InputStream inputStream = this.arduinoSerial.getInputStream();
         Scanner scanner = new Scanner(inputStream);
 
         while (scanner.hasNextLine()) {
+
+            String line = scanner.nextLine();
+
+            boolean test = (char) line.getBytes()[0] == 22;
+
+            if(test) {
+                this.sendMessage("Salam!5");
+            }
 
             System.out.println(scanner.nextLine());
 
@@ -39,7 +49,7 @@ public class ArduinoSerialCommunication {
         StopWatch stopWatch = StopWatch.createStarted();
 
         while (true) {
-            this.sendMessage(this.arduinoSerial, SYNC_ASCII_SYMBOL);
+            this.sendMessage(SYNC_ASCII_SYMBOL);
 
             try {
                 Thread.sleep(50);
@@ -89,17 +99,17 @@ public class ArduinoSerialCommunication {
         return readBuffer[0];
     }
 
-    public void sendMessage(SerialPort serialPort, byte message) {
+    public void sendMessage(byte message) {
         byte[] messageBytes = new byte[1];
         messageBytes[0] = message;
 
-        int result = serialPort.writeBytes(messageBytes, messageBytes.length);
+        int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
     }
 
-    public void sendMessage(SerialPort serialPort, String message) {
+    public void sendMessage(String message) {
         byte[] messageBytes = message.getBytes();
 
-        int result = serialPort.writeBytes(messageBytes, messageBytes.length);
+        int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
     }
 
 }
