@@ -3,10 +3,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ArduinoSerialCommunication {
 
@@ -20,11 +17,81 @@ public class ArduinoSerialCommunication {
         this.arduinoSerial.openPort();
         this.arduinoSerial.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
 
-        /*TODO: да де но сега пък не работи синхронизацията с това блокиране!?*/
+        //Wait to receive if it is ready
 
-        /*TODO: On simple sync just start*/
-        //Thread.sleep(1500);
 
+        this.synchronizeNew();
+
+        for (int i = 0; i < 100; i++) {
+            this.sendLine(String.valueOf(i));
+        }
+
+        Thread.sleep(10000);
+        while (true) {
+            String line = this.readLine();
+
+            System.out.println(line);
+        }
+    }
+
+    /**
+     * Responsible for finding a ASCII Sequence.
+     */
+    private class ASCIISequence {
+
+        private List<Integer> sequence;
+        private List<Integer> expected;
+
+        public ASCIISequence(Integer... characterCodes) {
+            this.expected = Arrays.asList(characterCodes);
+            this.sequence = new ArrayList<>();
+        }
+
+        /**
+         * Will insert character to the current sequence.
+         * If the character fails the pattern, then the current sequence will be reset.
+         *
+         * @return true/false depending if the sequence was completed
+         */
+        public boolean insert(int characterCode) {
+
+            this.sequence.add(characterCode);
+
+            Integer expectedAtPosition = this.expected.get(this.sequence.size() - 1);
+
+            if (!expectedAtPosition.equals(characterCode)) {
+                this.sequence.clear();
+                return false;
+            }
+
+            return this.sequence.size() == this.expected.size();
+        }
+    }
+
+    /**
+     * Will finish, when the SYN character is received.
+     * It is indication that the embedded device has started
+     *
+     * @return
+     */
+    private boolean synchronizeNew() {
+        StopWatch stopWatch = StopWatch.createStarted();
+        ASCIISequence asciiSequence = new ASCIISequence(22, 13, 10);
+
+        while (true) {
+            Byte value = this.readByte();
+
+            if (asciiSequence.insert(value)) {
+                System.out.println("Synchronization finished in " + stopWatch.toString());
+                stopWatch.stop();
+                return true;
+            }
+        }
+    }
+
+
+    public void synchronize() {
+        StopWatch stopWatch = StopWatch.createStarted();
 
         InputStream inputStream = this.arduinoSerial.getInputStream();
         Scanner scanner = new Scanner(inputStream);
@@ -33,81 +100,41 @@ public class ArduinoSerialCommunication {
 
             String line = scanner.nextLine();
 
-            boolean test = (char) line.getBytes()[0] == 22;
-
-            if(test) {
-                this.sendMessage("Salam!5");
-            }
-
-            System.out.println(scanner.nextLine());
-
-        }
-
-    }
-
-    public void synchronize() {
-        StopWatch stopWatch = StopWatch.createStarted();
-
-        while (true) {
-            this.sendMessage(SYNC_ASCII_SYMBOL);
-
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            byte[] readBuffer = new byte[4];
-            this.arduinoSerial.readBytes(readBuffer, readBuffer.length);
-
-            if (readBuffer[0] == 50 && readBuffer[1] == 50 && readBuffer[2] == 13 && readBuffer[3] == 10) {
+            if (this.isSYNLine(line)) {
+                System.out.println("Synchronization finished in " + stopWatch.toString());
                 stopWatch.stop();
-                System.out.println("Synchronization Finished in " + stopWatch.toString());
                 break;
+            } else {
+                System.out.println();
             }
-
-            //arduinoSerial.addDataListener(new DataListener());
         }
     }
 
-    public String readLine() {
-        StringBuilder line = new StringBuilder();
-        boolean isCRPrevious = false;
+    private Byte readByte() {
+        byte[] bytes = new byte[1];
+        this.arduinoSerial.readBytes(bytes, 1);
+
+        return bytes[0];
+    }
+
+    private String readLine() {
+        InputStream inputStream = this.arduinoSerial.getInputStream();
+        Scanner scanner = new Scanner(inputStream);
 
         while (true) {
-            char character = (char) this.readByte();
 
-            if (character == 0)
-                continue;
-
-            if (character == '\r') {
-                isCRPrevious = true;
-                line.append(character);
-            } else if (character == '\n' && isCRPrevious) {
-                line.deleteCharAt(line.length() - 1);
-                return line.toString();
-            } else {
-                line.append(character);
-            }
+            if (scanner.hasNextLine())
+                return scanner.nextLine();
         }
     }
 
-    private byte readByte() {
-        byte[] readBuffer = new byte[1];
-        this.arduinoSerial.readBytes(readBuffer, readBuffer.length);
-
-        return readBuffer[0];
+    private boolean isSYNLine(String line) {
+        return (char) line.getBytes()[0] == 22;
     }
 
-    public void sendMessage(byte message) {
-        byte[] messageBytes = new byte[1];
-        messageBytes[0] = message;
-
-        int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
-    }
-
-    public void sendMessage(String message) {
-        byte[] messageBytes = message.getBytes();
+    public void sendLine(String line) {
+        line = line.concat("\r\n");
+        byte[] messageBytes = line.getBytes();
 
         int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
     }
