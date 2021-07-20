@@ -14,24 +14,27 @@ public class ArduinoSerialCommunication {
 
     public void start() throws IOException, InterruptedException {
         this.arduinoSerial = SerialPort.getCommPort(PORT_NAME);
-        this.arduinoSerial.openPort();
         this.arduinoSerial.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
+        this.arduinoSerial.openPort();
 
         //Wait to receive if it is ready
 
 
         this.synchronizeNew();
+        Thread dataReaderThread = new Thread(() -> {
+            while (true) {
+                String line = this.readLine();
 
-        for (int i = 0; i < 100; i++) {
-            this.sendLine(String.valueOf(i));
-        }
-
-        Thread.sleep(10000);
-        while (true) {
-            String line = this.readLine();
-
-            System.out.println(line);
-        }
+                System.out.println(line);
+            }
+        });
+        dataReaderThread.setName("Arduino Serial Data Reader");
+        dataReaderThread.start();
+/*
+        for (int i = 0; i < 101; i++) {
+            this.sendLine(i + "=> " + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            Thread.sleep(50);
+        }*/
     }
 
     /**
@@ -89,27 +92,6 @@ public class ArduinoSerialCommunication {
         }
     }
 
-
-    public void synchronize() {
-        StopWatch stopWatch = StopWatch.createStarted();
-
-        InputStream inputStream = this.arduinoSerial.getInputStream();
-        Scanner scanner = new Scanner(inputStream);
-
-        while (scanner.hasNextLine()) {
-
-            String line = scanner.nextLine();
-
-            if (this.isSYNLine(line)) {
-                System.out.println("Synchronization finished in " + stopWatch.toString());
-                stopWatch.stop();
-                break;
-            } else {
-                System.out.println();
-            }
-        }
-    }
-
     private Byte readByte() {
         byte[] bytes = new byte[1];
         this.arduinoSerial.readBytes(bytes, 1);
@@ -128,15 +110,15 @@ public class ArduinoSerialCommunication {
         }
     }
 
-    private boolean isSYNLine(String line) {
-        return (char) line.getBytes()[0] == 22;
-    }
-
     public void sendLine(String line) {
-        line = line.concat("\r\n");
-        byte[] messageBytes = line.getBytes();
+        byte[] messageBytes = line
+                .concat("\n")
+                .getBytes();
 
         int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
+
+        if (result == -1)
+            System.out.println("Error writing to the serial port!");
     }
 
 }
