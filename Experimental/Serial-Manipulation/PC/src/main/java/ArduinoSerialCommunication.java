@@ -21,7 +21,7 @@ public class ArduinoSerialCommunication {
         this.waitUntilDeviceIsReady();
 
 
-   /*     Thread dataReaderThread = new Thread(() -> {
+        /*Thread dataReaderThread = new Thread(() -> {
             while (true) {
                 String line = this.readLine();
 
@@ -29,10 +29,12 @@ public class ArduinoSerialCommunication {
             }
         });
         dataReaderThread.setName("Arduino Serial Data Reader");
-        dataReaderThread.start();
+        dataReaderThread.start();*/
+
+        this.arduinoSerial.addDataListener(new DataListener());
 
         this.sendLine("Goshko");
-        this.sendLine("-Roshko!");*/
+        this.sendLine("-Roshko!");
 /*
         for (int i = 0; i < 101; i++) {
             this.sendLine(i + "=> " + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -73,27 +75,7 @@ public class ArduinoSerialCommunication {
         return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= WAIT_READY_CHECK_TIMEOUT_MS;
     }
 
-    private Byte readByte() {
-        byte[] bytes = new byte[1];
-        this.arduinoSerial.readBytes(bytes, 1);
-
-        return bytes[0];
-    }
-
-    private String readLine() {
-        InputStream inputStream = this.arduinoSerial.getInputStream();
-        Scanner scanner = new Scanner(inputStream);
-
-        while (true) {
-
-            if (scanner.hasNextLine())
-                return scanner.nextLine();
-        }
-    }
-
     private String readLineNonBlocking() {
-        StopWatch stopWatch = StopWatch.createStarted();
-
         InputStream inputStream = this.arduinoSerial.getInputStream();
         Scanner scanner = new Scanner(inputStream);
 
