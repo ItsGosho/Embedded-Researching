@@ -6,8 +6,8 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
-//        ArduinoSerialCommunication serialCommunication = new ArduinoSerialCommunication();
-//        serialCommunication.start();
+        ArduinoSerialCommunication serialCommunication = new ArduinoSerialCommunication();
+        serialCommunication.start();
 
 
 

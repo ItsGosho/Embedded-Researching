@@ -20,7 +20,7 @@ public class ArduinoSerialCommunication {
         //Wait to receive if it is ready
 
 
-        this.synchronizeNew();
+        this.synchronize();
         Thread dataReaderThread = new Thread(() -> {
             while (true) {
                 String line = this.readLine();
@@ -42,11 +42,10 @@ public class ArduinoSerialCommunication {
 
     /**
      * Will finish, when the SYN character is received.
-     * It is indication that the embedded device has started
+     * It is indication that the embedded device can receive messages.
      *
-     * @return
      */
-    private boolean synchronizeNew() {
+    private void synchronize() {
         StopWatch stopWatch = StopWatch.createStarted();
         SequenceFinder<Integer> sequenceFinder = new SequenceFinder<>(22, 13, 10);
 
@@ -56,7 +55,7 @@ public class ArduinoSerialCommunication {
             if (sequenceFinder.insert(value)) {
                 System.out.println("Synchronization finished in " + stopWatch.toString());
                 stopWatch.stop();
-                return true;
+                break;
             }
         }
     }
