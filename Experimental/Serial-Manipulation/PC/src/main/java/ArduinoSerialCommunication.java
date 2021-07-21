@@ -44,6 +44,10 @@ public class ArduinoSerialCommunication {
     /**
      * Will finish, when the SYN character is received.
      * It is indication that the embedded device can receive messages.
+     * <p>
+     * Each given attempt is counted when the given timeout is exceeded.
+     *
+     * @throws SynchronizationTimedOutException if the attempts are exceeded
      */
     private void synchronize() {
         StopWatch synchronizationTime = StopWatch.createStarted();
@@ -55,8 +59,7 @@ public class ArduinoSerialCommunication {
             int value = this.readByte();
 
             if (sequenceFinder.insert(value)) {
-                System.out.println("Synchronization finished in " + synchronizationTime.toString());
-                synchronizationTime.stop();
+                this.handleSuccessfulSynchronization(synchronizationTime, syncAttempt);
                 break;
             }
 
@@ -69,6 +72,11 @@ public class ArduinoSerialCommunication {
 
     private boolean isSynchronizationTimedOut(StopWatch synchronizationTime, Integer syncAttempt) {
         return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= SYNCHRONIZATION_TIMEOUT_MS * syncAttempt;
+    }
+
+    private void handleSuccessfulSynchronization(StopWatch synchronizationTime, Integer syncAttempts) {
+        System.out.println(String.format("Synchronization finished in %s of %d attempt!", synchronizationTime.toString(), syncAttempts));
+        synchronizationTime.stop();
     }
 
     private void handleTimedOutSynchronization(Integer syncAttempt) {
