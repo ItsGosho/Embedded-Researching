@@ -9,7 +9,5 @@ public class Main {
         ArduinoSerialCommunication serialCommunication = new ArduinoSerialCommunication();
         serialCommunication.start();
 
-
-
     }
 }
