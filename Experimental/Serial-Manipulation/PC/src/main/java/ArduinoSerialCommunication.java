@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class ArduinoSerialCommunication {
 
     public static final Integer SYNCHRONIZATION_TIMEOUT_MS = 2000;
+    public static final Integer SYNCHRONIZATION_RETRIES = 2;
     public static final String PORT_NAME = "COM3";
 
     private SerialPort arduinoSerial;
@@ -48,6 +49,7 @@ public class ArduinoSerialCommunication {
         StopWatch synchronizationTime = StopWatch.createStarted();
         SequenceFinder<Integer> sequenceFinder = new SequenceFinder<>(22, 13, 10);
 
+        int retryCounter = 1;
         while (true) {
             int value = this.readByte();
 
@@ -57,8 +59,14 @@ public class ArduinoSerialCommunication {
                 break;
             }
 
-            if (synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= SYNCHRONIZATION_TIMEOUT_MS) {
-                throw new SynchronizationTimedOutException(SYNCHRONIZATION_TIMEOUT_MS);
+            if (synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= SYNCHRONIZATION_TIMEOUT_MS * retryCounter) {
+
+                System.out.println(String.format("Synchronization attempt %d/%d has timed out.", retryCounter, SYNCHRONIZATION_RETRIES));
+
+                if (retryCounter >= SYNCHRONIZATION_RETRIES)
+                    throw new SynchronizationTimedOutException(SYNCHRONIZATION_TIMEOUT_MS);
+
+                retryCounter++;
             }
         }
 
