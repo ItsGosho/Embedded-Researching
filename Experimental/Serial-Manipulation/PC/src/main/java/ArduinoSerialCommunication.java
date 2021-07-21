@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ArduinoSerialCommunication {
 
-    public static final Integer SYNCHRONIZATION_TIMEOUT_MS = 5000;
+    public static final Integer WAIT_READY_CHECK_TIMEOUT_MS = 5000;
     public static final String PORT_NAME = "COM3";
 
     private SerialPort arduinoSerial;
@@ -18,10 +18,9 @@ public class ArduinoSerialCommunication {
         //this.arduinoSerial.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
         this.arduinoSerial.openPort();
 
-        //Wait to receive if it is ready
+        this.waitUntilDeviceIsReady();
 
 
-        this.synchronize();
    /*     Thread dataReaderThread = new Thread(() -> {
             while (true) {
                 String line = this.readLine();
@@ -42,37 +41,36 @@ public class ArduinoSerialCommunication {
     }
 
     /**
-     * Will finish, when the SYN character is received.
-     * It is indication that the embedded device can receive messages.
-     * <p>
-     * Each given attempt is counted when the given timeout is exceeded.
+     * Will wait until the device returns "Ready"
+     * The idea is that if the device is ready it can receive the send messages from us otherwise they are lose
      *
-     * @throws SynchronizationTimedOutException if the attempts are exceeded
+     * Note that if the device is not reset when opening a serial port, the check will be fast, otherwise it will take time, because
+     * the device is resetting and the serial is not yet ready to accept messages.
+     *
+     * @throws SynchronizationTimedOutException if the given time for execution is exceeded
      */
-    private void synchronize() throws InterruptedException {
+    private void waitUntilDeviceIsReady() throws InterruptedException {
         StopWatch synchronizationTime = StopWatch.createStarted();
-        //SequenceFinder<Integer> sequenceFinder = new SequenceFinder<>(22, 13, 10);
-        SequenceFinder<String> sequenceFinder = new SequenceFinder<>("S", "Y", "N");
 
         while (true) {
-            this.sendLine("SYN");
+            this.sendLine("Ready");
 
             String line = this.readLineNonBlocking();
 
-            if ("SYN".equals(line)) {
-                System.out.println(String.format("Synchronization finished in %s!", synchronizationTime.toString()));
+            if ("Ready".equals(line)) {
+                System.out.println(String.format("Ready check finished in %s!", synchronizationTime.toString()));
                 synchronizationTime.stop();
                 break;
             }
 
             if (this.isSynchronizationTimedOut(synchronizationTime)) {
-                throw new SynchronizationTimedOutException("Synchronization timed out!");
+                throw new SynchronizationTimedOutException("Ready check timed out!");
             }
         }
     }
 
     private boolean isSynchronizationTimedOut(StopWatch synchronizationTime) {
-        return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= SYNCHRONIZATION_TIMEOUT_MS;
+        return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= WAIT_READY_CHECK_TIMEOUT_MS;
     }
 
     private Byte readByte() {
