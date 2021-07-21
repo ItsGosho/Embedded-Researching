@@ -30,6 +30,9 @@ public class ArduinoSerialCommunication {
         });
         dataReaderThread.setName("Arduino Serial Data Reader");
         dataReaderThread.start();
+
+        this.sendLine("Goshko");
+        this.sendLine("-Roshko!");
 /*
         for (int i = 0; i < 101; i++) {
             this.sendLine(i + "=> " + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
