@@ -10,6 +10,7 @@ public class ArduinoSerialCommunication {
 
     public static final Integer WAIT_READY_CHECK_TIMEOUT_MS = 5000;
     public static final String PORT_NAME = "COM3";
+    public static final String WAIT_READY_FLAG = "Ready";
 
     private SerialPort arduinoSerial;
 
@@ -53,11 +54,11 @@ public class ArduinoSerialCommunication {
         StopWatch synchronizationTime = StopWatch.createStarted();
 
         while (true) {
-            this.sendLine("Ready");
+            this.sendLine(WAIT_READY_FLAG);
 
             String line = this.readLineNonBlocking();
 
-            if ("Ready".equals(line)) {
+            if (WAIT_READY_FLAG.equals(line)) {
                 System.out.println(String.format("Ready check finished in %s!", synchronizationTime.toString()));
                 synchronizationTime.stop();
                 break;
