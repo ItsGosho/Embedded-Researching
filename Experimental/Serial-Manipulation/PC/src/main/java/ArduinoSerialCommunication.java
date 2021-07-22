@@ -77,37 +77,30 @@ public class ArduinoSerialCommunication {
         return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= WAIT_READY_CHECK_TIMEOUT_MS;
     }
 
-    private Byte readByte() {
-        byte[] bytes = new byte[1];
-        this.arduinoSerial.readBytes(bytes, 1);
-
-        return bytes[0];
-    }
-
     private String readLine() {
         InputStream arduinoInputStream = this.arduinoSerial.getInputStream();
 
         StringBuilder sequence = new StringBuilder();
 
-        while (true) {
-
-            /*TODO: Refactor*/
+        while (true)
             try {
-                if (arduinoInputStream.available() > 0) {
-                    char next = (char) arduinoInputStream.read();
 
-                    boolean isTerminator = next == '\n' || next == '\r';
+                if (arduinoInputStream.available() <= 0)
+                    continue;
 
-                    if (!isTerminator) {
-                        sequence.append(next);
-                    } else if (isTerminator && sequence.length() > 0) {
-                        return sequence.toString();
-                    }
-                }
+                char next = (char) arduinoInputStream.read();
+
+                boolean isTerminator = next == '\n' || next == '\r';
+                boolean isLineFinished = isTerminator && sequence.length() > 0;
+
+                if (!isTerminator)
+                    sequence.append(next);
+                else if (isLineFinished)
+                    return sequence.toString();
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }
     }
 
     private String readLineNonBlocking() {
