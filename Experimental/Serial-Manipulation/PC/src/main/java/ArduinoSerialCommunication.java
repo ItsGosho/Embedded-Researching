@@ -1,11 +1,7 @@
 import com.fazecast.jSerialComm.SerialPort;
-import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.lang3.time.StopWatch;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -122,15 +118,17 @@ public class ArduinoSerialCommunication {
                 .getBytes();
 
         int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
+        this.delay(10);
 
-        //TODO: refactor
+        return result;
+    }
+
+    private void delay(int milliseconds) {
         try {
-            Thread.sleep(10);
+            Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return result;
     }
 
 }
