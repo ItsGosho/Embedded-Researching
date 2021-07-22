@@ -91,6 +91,7 @@ public class ArduinoSerialCommunication {
 
         while (true) {
 
+            /*TODO: Refactor*/
             try {
                 if (arduinoInputStream.available() > 0) {
                     char next = (char) arduinoInputStream.read();
