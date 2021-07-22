@@ -14,15 +14,24 @@ public class ArduinoSerial {
     public static final String DEFAULT_PORT = "COM3";
     public static final String DEFAULT_READY_KEYWORD = "Ready";
     public static final Integer DEFAULT_READY_TIMEOUT = 1000;
+    public static final Integer DEFAULT_BAUD_RATE = 9600;
+    public static final Integer DEFAULT_DATA_BITS = 8;
+    public static final Integer DEFAULT_STOP_BITS = SerialPort.ONE_STOP_BIT;
+    public static final Integer DEFAULT_PARITY = SerialPort.NO_PARITY;
 
 
     private SerialPort arduinoSerial;
     private String port;
     private String readyKeyword;
     private Integer readyTimeout;
+    private Integer baudRate;
+    private Integer dataBits;
+    private Integer stopBits;
+    private Integer parity;
 
     public ArduinoSerial start() {
         this.arduinoSerial = SerialPort.getCommPort(this.port);
+        this.arduinoSerial.setComPortParameters(this.baudRate, this.dataBits, this.stopBits, this.parity);
         this.arduinoSerial.openPort();
 
         this.waitUntilDeviceIsReady();
@@ -41,6 +50,10 @@ public class ArduinoSerial {
         this.setPort(builder.getPort());
         this.setReadyKeyword(builder.getReadyKeyword());
         this.setReadyTimeout(builder.getReadyTimeout());
+        this.setBaudRate(builder.getBaudRate());
+        this.setDataBits(builder.getDataBits());
+        this.setStopBits(builder.getStopBits());
+        this.setParity(builder.getParity());
     }
 
     public ArduinoSerialBuilder builder() {
@@ -148,5 +161,21 @@ public class ArduinoSerial {
 
     public void setReadyTimeout(Integer readyTimeout) {
         this.readyTimeout = Optional.ofNullable(readyTimeout).orElse(DEFAULT_READY_TIMEOUT);
+    }
+
+    public void setBaudRate(Integer baudRate) {
+        this.baudRate = Optional.ofNullable(baudRate).orElse(DEFAULT_BAUD_RATE);
+    }
+
+    public void setDataBits(Integer dataBits) {
+        this.dataBits = Optional.ofNullable(dataBits).orElse(DEFAULT_DATA_BITS);
+    }
+
+    public void setStopBits(Integer stopBits) {
+        this.stopBits = Optional.ofNullable(stopBits).orElse(DEFAULT_STOP_BITS);
+    }
+
+    public void setParity(Integer parity) {
+        this.parity = Optional.ofNullable(parity).orElse(DEFAULT_PARITY);
     }
 }
