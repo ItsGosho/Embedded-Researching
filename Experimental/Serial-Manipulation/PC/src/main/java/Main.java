@@ -9,7 +9,7 @@ public class Main {
 
         ArduinoSerial serialCommunication = new ArduinoSerial()
                 .builder()
-                .withReadyTimeout(1500)
+                .withReadyTimeoutMS(1500)
                 .build()
                 .start();
 

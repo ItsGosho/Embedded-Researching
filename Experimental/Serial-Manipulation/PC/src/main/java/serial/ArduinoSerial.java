@@ -13,23 +13,23 @@ public class ArduinoSerial {
 
     public static final String DEFAULT_PORT = "COM3";
     public static final String DEFAULT_READY_KEYWORD = "Ready";
-    public static final Integer DEFAULT_READY_TIMEOUT = 1000;
+    public static final Integer DEFAULT_READY_TIMEOUT_MS = 1000;
     public static final Integer DEFAULT_BAUD_RATE = 9600;
     public static final Integer DEFAULT_DATA_BITS = 8;
     public static final Integer DEFAULT_STOP_BITS = SerialPort.ONE_STOP_BIT;
     public static final Integer DEFAULT_PARITY = SerialPort.NO_PARITY;
-    public static final Integer DEFAULT_SEND_LINE_DEBOUNCING = 10;
+    public static final Integer DEFAULT_SEND_LINE_DEBOUNCING_MS = 10;
 
 
     private SerialPort arduinoSerial;
     private String port;
     private String readyKeyword;
-    private Integer readyTimeout;
+    private Integer readyTimeoutMS;
     private Integer baudRate;
     private Integer dataBits;
     private Integer stopBits;
     private Integer parity;
-    private Integer sendLineDebouncing;
+    private Integer sendLineDebouncingMS;
 
     public ArduinoSerial start() {
         this.arduinoSerial = SerialPort.getCommPort(this.port);
@@ -44,24 +44,24 @@ public class ArduinoSerial {
     public ArduinoSerial() {
         this.setPort(DEFAULT_PORT);
         this.setReadyKeyword(DEFAULT_READY_KEYWORD);
-        this.setReadyTimeout(DEFAULT_READY_TIMEOUT);
+        this.setReadyTimeoutMS(DEFAULT_READY_TIMEOUT_MS);
         this.setBaudRate(DEFAULT_BAUD_RATE);
         this.setDataBits(DEFAULT_DATA_BITS);
         this.setStopBits(DEFAULT_STOP_BITS);
         this.setParity(DEFAULT_PARITY);
-        this.setSendLineDebouncing(DEFAULT_SEND_LINE_DEBOUNCING);
+        this.setSendLineDebouncingMS(DEFAULT_SEND_LINE_DEBOUNCING_MS);
     }
 
     public ArduinoSerial(ArduinoSerialBuilder builder) {
         this();
         this.setPort(builder.getPort());
         this.setReadyKeyword(builder.getReadyKeyword());
-        this.setReadyTimeout(builder.getReadyTimeout());
+        this.setReadyTimeoutMS(builder.getReadyTimeoutMS());
         this.setBaudRate(builder.getBaudRate());
         this.setDataBits(builder.getDataBits());
         this.setStopBits(builder.getStopBits());
         this.setParity(builder.getParity());
-        this.setSendLineDebouncing(builder.getSendLineDebouncing());
+        this.setSendLineDebouncingMS(builder.getSendLineDebouncingMS());
     }
 
     public ArduinoSerialBuilder builder() {
@@ -104,7 +104,7 @@ public class ArduinoSerial {
      * @return If the synchronization has timed out
      */
     private boolean isSynchronizationTimedOut(StopWatch synchronizationTime) {
-        return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= this.readyTimeout;
+        return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= this.readyTimeoutMS;
     }
 
     /**
@@ -170,7 +170,7 @@ public class ArduinoSerial {
                 .getBytes();
 
         int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
-        this.delay(this.sendLineDebouncing);
+        this.delay(this.sendLineDebouncingMS);
 
         return result;
     }
@@ -191,8 +191,8 @@ public class ArduinoSerial {
         this.readyKeyword = Optional.ofNullable(readyKeyword).orElse(DEFAULT_READY_KEYWORD);
     }
 
-    public void setReadyTimeout(Integer readyTimeout) {
-        this.readyTimeout = Optional.ofNullable(readyTimeout).orElse(DEFAULT_READY_TIMEOUT);
+    public void setReadyTimeoutMS(Integer readyTimeoutMS) {
+        this.readyTimeoutMS = Optional.ofNullable(readyTimeoutMS).orElse(DEFAULT_READY_TIMEOUT_MS);
     }
 
     public void setBaudRate(Integer baudRate) {
@@ -211,7 +211,7 @@ public class ArduinoSerial {
         this.parity = Optional.ofNullable(parity).orElse(DEFAULT_PARITY);
     }
 
-    public void setSendLineDebouncing(Integer sendLineDebouncing) {
-        this.sendLineDebouncing = Optional.ofNullable(sendLineDebouncing).orElse(DEFAULT_SEND_LINE_DEBOUNCING);
+    public void setSendLineDebouncingMS(Integer sendLineDebouncingMS) {
+        this.sendLineDebouncingMS = Optional.ofNullable(sendLineDebouncingMS).orElse(DEFAULT_SEND_LINE_DEBOUNCING_MS);
     }
 }

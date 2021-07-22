@@ -4,12 +4,12 @@ public class ArduinoSerialBuilder {
 
     private String port;
     private String readyKeyword;
-    private Integer readyTimeout;
+    private Integer readyTimeoutMS;
     private Integer baudRate;
     private Integer dataBits;
     private Integer stopBits;
     private Integer parity;
-    private Integer sendLineDebouncing;
+    private Integer sendLineDebouncingMS;
 
     public ArduinoSerialBuilder withPort(String port) {
         this.port = port;
@@ -21,8 +21,8 @@ public class ArduinoSerialBuilder {
         return this;
     }
 
-    public ArduinoSerialBuilder withReadyTimeout(Integer readyTimeout) {
-        this.readyTimeout = readyTimeout;
+    public ArduinoSerialBuilder withReadyTimeoutMS(Integer readyTimeoutMS) {
+        this.readyTimeoutMS = readyTimeoutMS;
         return this;
     }
 
@@ -46,8 +46,8 @@ public class ArduinoSerialBuilder {
         return this;
     }
 
-    public ArduinoSerialBuilder withSendLineDebouncing(Integer sendLineDebouncing) {
-        this.sendLineDebouncing = sendLineDebouncing;
+    public ArduinoSerialBuilder withSendLineDebouncingMS(Integer sendLineDebouncingMS) {
+        this.sendLineDebouncingMS = sendLineDebouncingMS;
         return this;
     }
 
@@ -56,34 +56,34 @@ public class ArduinoSerialBuilder {
     }
 
     public String getPort() {
-        return port;
+        return this.port;
     }
 
     public String getReadyKeyword() {
-        return readyKeyword;
+        return this.readyKeyword;
     }
 
-    public Integer getReadyTimeout() {
-        return readyTimeout;
+    public Integer getReadyTimeoutMS() {
+        return this.readyTimeoutMS;
     }
 
     public Integer getBaudRate() {
-        return baudRate;
+        return this.baudRate;
     }
 
     public Integer getDataBits() {
-        return dataBits;
+        return this.dataBits;
     }
 
     public Integer getStopBits() {
-        return stopBits;
+        return this.stopBits;
     }
 
     public Integer getParity() {
-        return parity;
+        return this.parity;
     }
 
-    public Integer getSendLineDebouncing() {
-        return sendLineDebouncing;
+    public Integer getSendLineDebouncingMS() {
+        return this.sendLineDebouncingMS;
     }
 }
