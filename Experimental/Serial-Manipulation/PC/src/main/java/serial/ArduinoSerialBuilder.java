@@ -9,6 +9,7 @@ public class ArduinoSerialBuilder {
     private Integer dataBits;
     private Integer stopBits;
     private Integer parity;
+    private Integer sendLineDebouncing;
 
     public ArduinoSerialBuilder withPort(String port) {
         this.port = port;
@@ -45,6 +46,11 @@ public class ArduinoSerialBuilder {
         return this;
     }
 
+    public ArduinoSerialBuilder withSendLineDebouncing(Integer sendLineDebouncing) {
+        this.sendLineDebouncing = sendLineDebouncing;
+        return this;
+    }
+
     public ArduinoSerial build() {
         return new ArduinoSerial(this);
     }
@@ -75,5 +81,9 @@ public class ArduinoSerialBuilder {
 
     public Integer getParity() {
         return parity;
+    }
+
+    public Integer getSendLineDebouncing() {
+        return sendLineDebouncing;
     }
 }

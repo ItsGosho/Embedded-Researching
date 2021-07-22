@@ -18,6 +18,7 @@ public class ArduinoSerial {
     public static final Integer DEFAULT_DATA_BITS = 8;
     public static final Integer DEFAULT_STOP_BITS = SerialPort.ONE_STOP_BIT;
     public static final Integer DEFAULT_PARITY = SerialPort.NO_PARITY;
+    public static final Integer DEFAULT_SEND_LINE_DEBOUNCING = 10;
 
 
     private SerialPort arduinoSerial;
@@ -28,6 +29,7 @@ public class ArduinoSerial {
     private Integer dataBits;
     private Integer stopBits;
     private Integer parity;
+    private Integer sendLineDebouncing;
 
     public ArduinoSerial start() {
         this.arduinoSerial = SerialPort.getCommPort(this.port);
@@ -54,6 +56,7 @@ public class ArduinoSerial {
         this.setDataBits(builder.getDataBits());
         this.setStopBits(builder.getStopBits());
         this.setParity(builder.getParity());
+        this.setSendLineDebouncing(builder.getSendLineDebouncing());
     }
 
     public ArduinoSerialBuilder builder() {
@@ -162,7 +165,7 @@ public class ArduinoSerial {
                 .getBytes();
 
         int result = this.arduinoSerial.writeBytes(messageBytes, messageBytes.length);
-        this.delay(10);
+        this.delay(this.sendLineDebouncing);
 
         return result;
     }
@@ -201,5 +204,9 @@ public class ArduinoSerial {
 
     public void setParity(Integer parity) {
         this.parity = Optional.ofNullable(parity).orElse(DEFAULT_PARITY);
+    }
+
+    public void setSendLineDebouncing(Integer sendLineDebouncing) {
+        this.sendLineDebouncing = Optional.ofNullable(sendLineDebouncing).orElse(DEFAULT_SEND_LINE_DEBOUNCING);
     }
 }
