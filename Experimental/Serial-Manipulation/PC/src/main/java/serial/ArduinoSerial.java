@@ -45,6 +45,11 @@ public class ArduinoSerial {
         this.setPort(DEFAULT_PORT);
         this.setReadyKeyword(DEFAULT_READY_KEYWORD);
         this.setReadyTimeout(DEFAULT_READY_TIMEOUT);
+        this.setBaudRate(DEFAULT_BAUD_RATE);
+        this.setDataBits(DEFAULT_DATA_BITS);
+        this.setStopBits(DEFAULT_STOP_BITS);
+        this.setParity(DEFAULT_PARITY);
+        this.setSendLineDebouncing(DEFAULT_SEND_LINE_DEBOUNCING);
     }
 
     public ArduinoSerial(ArduinoSerialBuilder builder) {
