@@ -89,10 +89,21 @@ public class ArduinoSerial {
         }
     }
 
+    /**
+     * Will return if the synchronization has timed out based on the provided synchronization time
+     *
+     * @param synchronizationTime Used for determining if the synchronization has timed out
+     * @return If the synchronization has timed out
+     */
     private boolean isSynchronizationTimedOut(StopWatch synchronizationTime) {
         return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= this.readyTimeout;
     }
 
+    /**
+     * Will read a line from the serial, but if there isn't it will wait until there is
+     *
+     * @return The read line from the serial
+     */
     public String readLine() {
         InputStream arduinoInputStream = this.arduinoSerial.getInputStream();
 
@@ -119,6 +130,11 @@ public class ArduinoSerial {
             }
     }
 
+    /**
+     * Will read a line from the serial, but if there isn't it will return null\
+     *
+     * @return The read line from the serial if not - null
+     */
     private String readLineNonBlocking() {
         InputStream inputStream = this.arduinoSerial.getInputStream();
         Scanner scanner = new Scanner(inputStream);
@@ -132,6 +148,14 @@ public class ArduinoSerial {
         }
     }
 
+    /**
+     * Will send a line to the serial.
+     * Note that the method blocks for 10ms to ensure if called fast that the communication will stay reliable.
+     *
+     * @param line The line, which will be send to the arduino
+     *
+     * @return The bytes sent to the arduino. If something went wrong a -1 will be returned
+     */
     public int sendLine(String line) {
         byte[] messageBytes = line
                 .concat("\n")
