@@ -30,13 +30,15 @@ public class ArduinoSerial {
     private Integer stopBits;
     private Integer parity;
     private Integer sendLineDebouncingMS;
+    private boolean isWaitUntilDeviceIsReadyDisabled;
 
     public ArduinoSerial start() {
         this.arduinoSerial = SerialPort.getCommPort(this.port);
         this.arduinoSerial.setComPortParameters(this.baudRate, this.dataBits, this.stopBits, this.parity);
         this.arduinoSerial.openPort();
 
-        this.waitUntilDeviceIsReady();
+        if (!this.isWaitUntilDeviceIsReadyDisabled)
+            this.waitUntilDeviceIsReady();
 
         return this;
     }
@@ -62,6 +64,7 @@ public class ArduinoSerial {
         this.setStopBits(builder.getStopBits());
         this.setParity(builder.getParity());
         this.setSendLineDebouncingMS(builder.getSendLineDebouncingMS());
+        this.setIsWaitUntilDeviceIsReadyDisabled(builder.isWaitUntilDeviceIsReadyDisabled());
     }
 
     public ArduinoSerialBuilder builder() {
@@ -161,7 +164,6 @@ public class ArduinoSerial {
      * Note that the method blocks for 10ms to ensure if called fast that the communication will stay reliable.
      *
      * @param line The line, which will be send to the arduino
-     *
      * @return The bytes sent to the arduino. If something went wrong a -1 will be returned
      */
     public int sendLine(String line) {
@@ -213,5 +215,9 @@ public class ArduinoSerial {
 
     public void setSendLineDebouncingMS(Integer sendLineDebouncingMS) {
         this.sendLineDebouncingMS = Optional.ofNullable(sendLineDebouncingMS).orElse(DEFAULT_SEND_LINE_DEBOUNCING_MS);
+    }
+
+    public void setIsWaitUntilDeviceIsReadyDisabled(boolean waitUntilDeviceIsReadyDisabled) {
+        isWaitUntilDeviceIsReadyDisabled = waitUntilDeviceIsReadyDisabled;
     }
 }

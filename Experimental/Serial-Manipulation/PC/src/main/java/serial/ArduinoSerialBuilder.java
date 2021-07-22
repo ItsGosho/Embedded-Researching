@@ -10,6 +10,7 @@ public class ArduinoSerialBuilder {
     private Integer stopBits;
     private Integer parity;
     private Integer sendLineDebouncingMS;
+    private boolean isWaitUntilDeviceIsReadyDisabled;
 
     public ArduinoSerialBuilder withPort(String port) {
         this.port = port;
@@ -51,6 +52,11 @@ public class ArduinoSerialBuilder {
         return this;
     }
 
+    public ArduinoSerialBuilder disableWaitUntilDeviceIsReady() {
+        this.isWaitUntilDeviceIsReadyDisabled = true;
+        return this;
+    }
+
     public ArduinoSerial build() {
         return new ArduinoSerial(this);
     }
@@ -85,5 +91,9 @@ public class ArduinoSerialBuilder {
 
     public Integer getSendLineDebouncingMS() {
         return this.sendLineDebouncingMS;
+    }
+
+    public boolean isWaitUntilDeviceIsReadyDisabled() {
+        return this.isWaitUntilDeviceIsReadyDisabled;
     }
 }

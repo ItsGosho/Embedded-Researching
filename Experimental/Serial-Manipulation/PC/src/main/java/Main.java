@@ -10,10 +10,14 @@ public class Main {
         ArduinoSerial serialCommunication = new ArduinoSerial()
                 .builder()
                 .withReadyTimeoutMS(1500)
+                .disableWaitUntilDeviceIsReady()
                 .build()
                 .start();
 
-        serialCommunication.sendLine("Cat!");
-        System.out.println(serialCommunication.readLine());
+        //serialCommunication.sendLine("Cat!");
+
+        while (true) {
+            System.out.println(serialCommunication.readLine());
+        }
     }
 }
