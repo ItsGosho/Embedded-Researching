@@ -1,3 +1,5 @@
+package serial;
+
 public class SynchronizationTimedOutException extends RuntimeException {
 
     public SynchronizationTimedOutException() {

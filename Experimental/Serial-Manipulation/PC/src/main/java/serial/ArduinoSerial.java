@@ -1,44 +1,50 @@
+package serial;
+
 import com.fazecast.jSerialComm.SerialPort;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.InputStream;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class ArduinoSerialCommunication {
+public class ArduinoSerial {
 
-    public static final Integer WAIT_READY_CHECK_TIMEOUT_MS = 5000;
-    public static final String PORT_NAME = "COM3";
-    public static final String WAIT_READY_FLAG = "Ready";
+    public static final String DEFAULT_PORT = "COM3";
+    public static final String DEFAULT_READY_KEYWORD = "Ready";
+    public static final Integer DEFAULT_READY_TIMEOUT = 5000;
+
 
     private SerialPort arduinoSerial;
+    private String port;
+    private String readyKeyword;
+    private Integer readyTimeout;
 
-    public void start() throws InterruptedException {
-        this.arduinoSerial = SerialPort.getCommPort(PORT_NAME);
-        //this.arduinoSerial.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
+    public ArduinoSerial start() {
+        this.arduinoSerial = SerialPort.getCommPort(this.port);
         this.arduinoSerial.openPort();
 
         this.waitUntilDeviceIsReady();
 
+        return this;
+    }
 
-        Thread dataReaderThread = new Thread(() -> {
-            while (true) {
-                String line = this.readLine();
+    public ArduinoSerial() {
+        this.setPort(DEFAULT_PORT);
+        this.setReadyKeyword(DEFAULT_READY_KEYWORD);
+        this.setReadyTimeout(DEFAULT_READY_TIMEOUT);
+    }
 
-                System.out.println(line);
-            }
-        });
-        dataReaderThread.setName("Arduino Serial Data Reader");
-        dataReaderThread.start();
+    public ArduinoSerial(ArduinoSerialBuilder builder) {
+        this();
+        this.setPort(builder.getPort());
+        this.setReadyKeyword(builder.getReadyKeyword());
+        this.setReadyTimeout(builder.getReadyTimeout());
+    }
 
-        this.sendLine("Goshko");
-        this.sendLine("-Roshko!");
-/*
-        for (int i = 0; i < 101; i++) {
-            this.sendLine(i + "=> " + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            Thread.sleep(50);
-        }*/
+    public ArduinoSerialBuilder builder() {
+        return new ArduinoSerialBuilder();
     }
 
     /**
@@ -50,15 +56,15 @@ public class ArduinoSerialCommunication {
      *
      * @throws SynchronizationTimedOutException if the given time for execution is exceeded
      */
-    private void waitUntilDeviceIsReady() throws InterruptedException {
+    private void waitUntilDeviceIsReady() {
         StopWatch synchronizationTime = StopWatch.createStarted();
 
         while (true) {
-            this.sendLine(WAIT_READY_FLAG);
+            this.sendLine(this.readyKeyword);
 
             String line = this.readLineNonBlocking();
 
-            if (WAIT_READY_FLAG.equals(line)) {
+            if (this.readyKeyword.equals(line)) {
                 System.out.println(String.format("Ready check finished in %s!", synchronizationTime.toString()));
                 synchronizationTime.stop();
                 break;
@@ -71,10 +77,10 @@ public class ArduinoSerialCommunication {
     }
 
     private boolean isSynchronizationTimedOut(StopWatch synchronizationTime) {
-        return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= WAIT_READY_CHECK_TIMEOUT_MS;
+        return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= this.readyTimeout;
     }
 
-    private String readLine() {
+    public String readLine() {
         InputStream arduinoInputStream = this.arduinoSerial.getInputStream();
 
         StringBuilder sequence = new StringBuilder();
@@ -132,4 +138,15 @@ public class ArduinoSerialCommunication {
         }
     }
 
+    public void setPort(String port) {
+        this.port = Optional.ofNullable(port).orElse(DEFAULT_PORT);
+    }
+
+    public void setReadyKeyword(String readyKeyword) {
+        this.readyKeyword = Optional.ofNullable(readyKeyword).orElse(DEFAULT_READY_KEYWORD);
+    }
+
+    public void setReadyTimeout(Integer readyTimeout) {
+        this.readyTimeout = Optional.ofNullable(readyTimeout).orElse(DEFAULT_READY_TIMEOUT);
+    }
 }

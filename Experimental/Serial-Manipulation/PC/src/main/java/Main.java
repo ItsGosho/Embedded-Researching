@@ -1,13 +1,19 @@
+import serial.ArduinoSerial;
+
 import java.io.IOException;
 
 public class Main {
 
-    boolean hasSynchronizationFinished = false;
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
-        ArduinoSerialCommunication serialCommunication = new ArduinoSerialCommunication();
-        serialCommunication.start();
+        ArduinoSerial serialCommunication = new ArduinoSerial()
+                .builder()
+                .withReadyTimeout(1500)
+                .build()
+                .start();
 
+        serialCommunication.sendLine("Cat!");
+        System.out.println(serialCommunication.readLine());
     }
 }
