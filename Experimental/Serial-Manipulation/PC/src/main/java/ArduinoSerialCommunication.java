@@ -1,7 +1,11 @@
 import com.fazecast.jSerialComm.SerialPort;
+import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +25,7 @@ public class ArduinoSerialCommunication {
         this.waitUntilDeviceIsReady();
 
 
-        /*Thread dataReaderThread = new Thread(() -> {
+        Thread dataReaderThread = new Thread(() -> {
             while (true) {
                 String line = this.readLine();
 
@@ -29,9 +33,7 @@ public class ArduinoSerialCommunication {
             }
         });
         dataReaderThread.setName("Arduino Serial Data Reader");
-        dataReaderThread.start();*/
-
-        this.arduinoSerial.addDataListener(new DataListener());
+        dataReaderThread.start();
 
         this.sendLine("Goshko");
         this.sendLine("-Roshko!");
@@ -45,7 +47,7 @@ public class ArduinoSerialCommunication {
     /**
      * Will wait until the device returns "Ready"
      * The idea is that if the device is ready it can receive the send messages from us otherwise they are lose
-     *
+     * <p>
      * Note that if the device is not reset when opening a serial port, the check will be fast, otherwise it will take time, because
      * the device is resetting and the serial is not yet ready to accept messages.
      *
@@ -73,6 +75,38 @@ public class ArduinoSerialCommunication {
 
     private boolean isSynchronizationTimedOut(StopWatch synchronizationTime) {
         return synchronizationTime.getTime(TimeUnit.MILLISECONDS) >= WAIT_READY_CHECK_TIMEOUT_MS;
+    }
+
+    private Byte readByte() {
+        byte[] bytes = new byte[1];
+        this.arduinoSerial.readBytes(bytes, 1);
+
+        return bytes[0];
+    }
+
+    private String readLine() {
+        InputStream arduinoInputStream = this.arduinoSerial.getInputStream();
+
+        StringBuilder sequence = new StringBuilder();
+
+        while (true) {
+
+            try {
+                if (arduinoInputStream.available() > 0) {
+                    char next = (char) arduinoInputStream.read();
+
+                    boolean isTerminator = next == '\n' || next == '\r';
+
+                    if (!isTerminator) {
+                        sequence.append(next);
+                    } else if (isTerminator && sequence.length() > 0) {
+                        return sequence.toString();
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     private String readLineNonBlocking() {
