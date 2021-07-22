@@ -13,7 +13,7 @@ public class ArduinoSerial {
 
     public static final String DEFAULT_PORT = "COM3";
     public static final String DEFAULT_READY_KEYWORD = "Ready";
-    public static final Integer DEFAULT_READY_TIMEOUT = 5000;
+    public static final Integer DEFAULT_READY_TIMEOUT = 1000;
 
 
     private SerialPort arduinoSerial;
