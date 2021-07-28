@@ -1,27 +1,23 @@
-import com.fazecast.jSerialComm.SerialPort;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import serial.ArduinoSerial;
+
+import java.io.IOException;
 
 public class Main {
 
-    private final Logger LOGGER = LogManager.getLogger();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
-        SerialPort[] serialPorts = SerialPort.getCommPorts();
-        SerialPort arduinoSerial = SerialPort.getCommPort("COM3");
-        //SerialPort arduinoPortFromAvailable = serialPorts[0];
+        ArduinoSerial serialCommunication = new ArduinoSerial()
+                .builder()
+                .withReadyTimeoutMS(1500)
+                .disableWaitUntilDeviceIsReady()
+                .build()
+                .start();
 
-        arduinoSerial.openPort();
+        //serialCommunication.sendLine("Cat!");
 
-        arduinoSerial.addDataListener(new DataListener());
-
-       /* byte[] bytes = new byte[10];
-        while (arduinoSerial.bytesAvailable() > 0) {
-            arduinoSerial.readBytes(bytes, 10);
-            int test = 5;
-        }*/
-
-        int a = 5;
+        while (true) {
+            System.out.println(serialCommunication.readLine());
+        }
     }
 }
